@@ -1,0 +1,15 @@
+{
+  "routes": [
+    {
+      "path": "/",
+      "page": "index",
+      "routeType": "page",
+      "layout": "main"
+    },
+    {
+      "path": "/vehicle-listing",
+      "page": "vehicle-listing",
+      "layout": "main"
+    }
+  ]
+}
