@@ -1,0 +1,222 @@
+{
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "brand_name"
+      },
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "",
+      "module": "core",
+      "action": "trycatch",
+      "options": {
+        "try": {
+          "steps": {
+            "name": "query",
+            "module": "dbconnector",
+            "action": "select",
+            "options": {
+              "connection": "autonetdb",
+              "sql": {
+                "type": "select",
+                "columns": [],
+                "params": [
+                  {
+                    "operator": "equal",
+                    "type": "expression",
+                    "name": ":P1",
+                    "value": "{{$_GET.brand_name}}",
+                    "test": ""
+                  }
+                ],
+                "table": {
+                  "name": "vehicle_data"
+                },
+                "primary": "id",
+                "joins": [],
+                "wheres": {
+                  "condition": "AND",
+                  "rules": [
+                    {
+                      "id": "vehicle_data.Brand",
+                      "field": "vehicle_data.Brand",
+                      "type": "string",
+                      "operator": "equal",
+                      "value": "{{$_GET.brand_name}}",
+                      "data": {
+                        "table": "vehicle_data",
+                        "column": "Brand",
+                        "type": "text",
+                        "columnObj": {
+                          "type": "string",
+                          "maxLength": 255,
+                          "primary": false,
+                          "nullable": true,
+                          "name": "Brand"
+                        }
+                      },
+                      "operation": "="
+                    }
+                  ],
+                  "conditional": null,
+                  "valid": true
+                },
+                "query": "select * from `vehicle_data` where `vehicle_data`.`Brand` = ?"
+              }
+            },
+            "output": true,
+            "meta": [
+              {
+                "type": "number",
+                "name": "id"
+              },
+              {
+                "type": "text",
+                "name": "Brand"
+              },
+              {
+                "type": "text",
+                "name": "Model"
+              },
+              {
+                "type": "text",
+                "name": "Prix_de_vente_conseille"
+              },
+              {
+                "type": "text",
+                "name": "Economie"
+              },
+              {
+                "type": "text",
+                "name": "Votre_prix"
+              },
+              {
+                "type": "text",
+                "name": "Premiere_mise_en_circulation"
+              },
+              {
+                "type": "text",
+                "name": "Kilometrage"
+              },
+              {
+                "type": "text",
+                "name": "Puissance"
+              },
+              {
+                "type": "text",
+                "name": "Energie"
+              },
+              {
+                "type": "text",
+                "name": "Type_de_vehicule"
+              },
+              {
+                "type": "text",
+                "name": "Carrosserie"
+              },
+              {
+                "type": "text",
+                "name": "Couleur"
+              },
+              {
+                "type": "text",
+                "name": "Transmission"
+              },
+              {
+                "type": "text",
+                "name": "Couleur_exterieure"
+              },
+              {
+                "type": "text",
+                "name": "Consommation_urbaine_1"
+              },
+              {
+                "type": "text",
+                "name": "Consommation_extra_urbaine_1"
+              },
+              {
+                "type": "text",
+                "name": "Classe_d_efficience_energetique"
+              },
+              {
+                "type": "text",
+                "name": "Emissions_de_CO2_1"
+              },
+              {
+                "type": "text",
+                "name": "Equipements_principaux"
+              },
+              {
+                "type": "text",
+                "name": "Equipements"
+              },
+              {
+                "type": "text",
+                "name": "Numero_interne"
+              },
+              {
+                "type": "text",
+                "name": "Lieu"
+              },
+              {
+                "type": "text",
+                "name": "Disponibilite"
+              },
+              {
+                "type": "text",
+                "name": "Consommation_electr_mixte_1"
+              },
+              {
+                "type": "number",
+                "name": "Tarif"
+              },
+              {
+                "type": "datetime",
+                "name": "Created"
+              },
+              {
+                "type": "datetime",
+                "name": "Modified"
+              },
+              {
+                "type": "text",
+                "name": "Vehicle_Image"
+              },
+              {
+                "type": "boolean",
+                "name": "Desactive"
+              },
+              {
+                "type": "number",
+                "name": "cm3"
+              }
+            ],
+            "outputType": "array"
+          }
+        },
+        "catch": {
+          "steps": {
+            "name": "Response",
+            "module": "core",
+            "action": "response",
+            "options": {
+              "status": 403,
+              "data": "An error occurred!"
+            }
+          }
+        }
+      }
+    }
+  }
+}

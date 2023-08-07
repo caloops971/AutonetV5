@@ -2,5 +2,17 @@
   "vehicle-listing.ejs": {
     "layoutPage": "main",
     "description": ""
+  },
+  "vehicle-details.ejs": {
+    "layoutPage": "main",
+    "description": ""
+  },
+  "contact.ejs": {
+    "layoutPage": "main",
+    "description": ""
+  },
+  "about.ejs": {
+    "layoutPage": "main",
+    "description": ""
   }
 }

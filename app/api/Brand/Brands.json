@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "",
+      "module": "core",
+      "action": "trycatch",
+      "options": {
+        "try": {
+          "steps": {
+            "name": "query",
+            "module": "dbconnector",
+            "action": "select",
+            "options": {
+              "connection": "autonetDB",
+              "sql": {
+                "type": "select",
+                "columns": [
+                  {
+                    "table": "vehicle_data",
+                    "column": "Brand"
+                  }
+                ],
+                "params": [],
+                "table": {
+                  "name": "vehicle_data"
+                },
+                "primary": "id",
+                "joins": [],
+                "distinct": true,
+                "orders": [
+                  {
+                    "table": "vehicle_data",
+                    "column": "Brand",
+                    "direction": "ASC",
+                    "recid": 1
+                  }
+                ],
+                "query": "select distinct `Brand` from `vehicle_data` order by `Brand` ASC"
+              }
+            },
+            "output": true,
+            "meta": [
+              {
+                "type": "text",
+                "name": "Brand"
+              }
+            ],
+            "outputType": "array"
+          }
+        },
+        "catch": {
+          "steps": {
+            "name": "Response",
+            "module": "core",
+            "action": "response",
+            "options": {
+              "status": 403,
+              "data": "An error occurred!"
+            }
+          }
+        }
+      }
+    }
+  }
+}

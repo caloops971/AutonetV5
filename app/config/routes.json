@@ -10,6 +10,21 @@
       "path": "/vehicle-listing",
       "page": "vehicle-listing",
       "layout": "main"
+    },
+    {
+      "path": "/vehicle-details",
+      "page": "vehicle-details",
+      "layout": "main"
+    },
+    {
+      "path": "/contact",
+      "page": "contact",
+      "layout": "main"
+    },
+    {
+      "path": "/about",
+      "page": "about",
+      "layout": "main"
     }
   ]
 }

@@ -1,0 +1,20 @@
+{
+  "name": "autonetDB",
+  "module": "dbconnector",
+  "action": "connect",
+  "options": {
+    "client": "mysql2",
+    "connection": {
+      "host": "db-mysql-autonet-wappler-do-user-14091844-0.b.db.ondigitalocean.com",
+      "port": 25060,
+      "user": "doadmin",
+      "password": "AVNS_xQMhWw_LZqPnvq3Vddh",
+      "database": "defaultdb",
+      "ssl": {
+        "rejectUnauthorized": false
+      }
+    },
+    "tz": "utc"
+  },
+  "fileName": "autonetDB.json"
+}

@@ -1,0 +1,198 @@
+{
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      },
+      {
+        "type": "text",
+        "name": "ofset"
+      },
+      {
+        "type": "text",
+        "name": "limit"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "",
+      "module": "core",
+      "action": "trycatch",
+      "options": {
+        "try": {
+          "steps": {
+            "name": "query",
+            "module": "dbconnector",
+            "action": "paged",
+            "options": {
+              "connection": "autonetDB",
+              "sql": {
+                "type": "select",
+                "columns": [
+                  {
+                    "table": "vehicle_data",
+                    "column": "Brand"
+                  },
+                  {
+                    "table": "vb",
+                    "column": "brand_image_url"
+                  }
+                ],
+                "params": [],
+                "table": {
+                  "name": "vehicle_data"
+                },
+                "primary": "id",
+                "joins": [
+                  {
+                    "table": "vehicle_brand",
+                    "column": "*",
+                    "alias": "vb",
+                    "type": "LEFT",
+                    "clauses": {
+                      "condition": "AND",
+                      "rules": [
+                        {
+                          "table": "vb",
+                          "column": "brand_name",
+                          "operator": "equal",
+                          "operation": "=",
+                          "value": {
+                            "table": "vehicle_data",
+                            "column": "Brand"
+                          }
+                        }
+                      ]
+                    },
+                    "primary": "id"
+                  }
+                ],
+                "distinct": true,
+                "query": "select distinct `vehicle_data`.`Brand`, `vb`.`brand_image_url` from `vehicle_data` left join `vehicle_brand` as `vb` on `vb`.`brand_name` = `vehicle_data`.`Brand` where `vb`.`brand_image_url` <> ? order by `vehicle_data`.`Brand` ASC",
+                "wheres": {
+                  "condition": "AND",
+                  "rules": [
+                    {
+                      "id": "vb.brand_image_url",
+                      "field": "vb.brand_image_url",
+                      "type": "string",
+                      "operator": "is_not_empty",
+                      "value": "",
+                      "data": {
+                        "table": "vb",
+                        "column": "brand_image_url",
+                        "type": "text",
+                        "columnObj": {
+                          "type": "string",
+                          "maxLength": 255,
+                          "primary": false,
+                          "nullable": true,
+                          "name": "brand_image_url"
+                        }
+                      },
+                      "operation": "<>",
+                      "table": "vehicle_data"
+                    }
+                  ],
+                  "conditional": null,
+                  "valid": true
+                },
+                "orders": [
+                  {
+                    "table": "vehicle_data",
+                    "column": "Brand",
+                    "direction": "ASC"
+                  }
+                ]
+              }
+            },
+            "output": true,
+            "meta": [
+              {
+                "name": "offset",
+                "type": "number"
+              },
+              {
+                "name": "limit",
+                "type": "number"
+              },
+              {
+                "name": "total",
+                "type": "number"
+              },
+              {
+                "name": "page",
+                "type": "object",
+                "sub": [
+                  {
+                    "name": "offset",
+                    "type": "object",
+                    "sub": [
+                      {
+                        "name": "first",
+                        "type": "number"
+                      },
+                      {
+                        "name": "prev",
+                        "type": "number"
+                      },
+                      {
+                        "name": "next",
+                        "type": "number"
+                      },
+                      {
+                        "name": "last",
+                        "type": "number"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "current",
+                    "type": "number"
+                  },
+                  {
+                    "name": "total",
+                    "type": "number"
+                  }
+                ]
+              },
+              {
+                "name": "data",
+                "type": "array",
+                "sub": [
+                  {
+                    "type": "text",
+                    "name": "Brand"
+                  },
+                  {
+                    "type": "text",
+                    "name": "brand_image_url"
+                  }
+                ]
+              }
+            ],
+            "outputType": "object",
+            "type": "dbconnector_paged_select"
+          }
+        },
+        "catch": {
+          "steps": {
+            "name": "Response",
+            "module": "core",
+            "action": "response",
+            "options": {
+              "status": 403,
+              "data": "An error occurred!"
+            }
+          }
+        }
+      }
+    }
+  }
+}
