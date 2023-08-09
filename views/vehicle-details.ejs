@@ -1,6 +1,6 @@
-<!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="vehicledetails" appConnect="local" components="{dmxBootstrap5Navigation:{}}" -->
-<meta name="ac:route" content="/vehicle-details">
-
+<!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="vehicledetails" appConnect="local" components="{dmxBootstrap5Navigation:{},dmxFormatter:{}}" -->
+<meta name="ac:route" content="/vehicle-details/:id/:model">
+<dmx-serverconnect id="scVehicleDetails" url="/api/Vehicle/VehicleDetails" dmx-param:vehicle_id="query.id"></dmx-serverconnect>
 <!-- User page bottom -->
 <div class="listing-with-map car-details">
     <div class="container">
@@ -49,16 +49,180 @@
                     </div>
                 </div>
                 <div class="car-details-tab">
+
+
+                    <div id="accordion">
+                        <div class="card">
+                            <a class="btn orange-btn collapsed text-light font-weight-bold" data-bs-toggle="collapse" href="#collapseOne">
+                                <div class="card-headerr text-start py-1">
+                                    Equipements Principaux:
+                                </div>
+                            </a>
+                            <div id="collapseOne" class="collapse show" data-bs-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="row" is="dmx-repeat" id="repeat1" dmx-bind:repeat="scVehicleDetails.data.Equipements_principaux">
+                                        <div class="col-6 ">
+                                            <p>{{scVehicleDetails.data.Equipements_principaux[$index]}}</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <a class="btn orange-btn collapsed text-light font-weight-bold p-0" data-bs-toggle="collapse" href="#collapseTwo">
+                                <div class="card-header text-start">
+                                    Equipements
+                                </div>
+                            </a>
+                            <div id="collapseTwo" class="collapse" data-bs-parent="#accordion">
+                                <div class="card-body row mx-0">
+                                    <div class="col-12 col-md-6">
+                                        <div class="row mx-0" id="repeatEquipments">
+                                            <div class="col-5 ">
+                                                <p>Airbag</p>
+                                            </div>
+                                            <div class="col-7">
+                                                <div class="col-12 px-0" dmx-repeat="scVehicleDetails.data.Equipments[0].Airbag">
+                                                    <p>{{scVehicleDetails.data.Equipments[0].Airbag[$index]}}</p>
+                                                </div>
+                                                <!--  -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="row mx-0">
+                                            <div class="col-5">
+                                                <p>Climatisation</p>
+                                            </div>
+                                            <div class="col-7">
+                                                <div class="col-12 px-0" dmx-repeat="scVehicleDetails.data.Equipments[0].Climatisation">
+                                                    <p>{{scVehicleDetails.data.Equipments[0].Climatisation[$index]}}</p>
+                                                </div>
+                                                <!--  -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="row mx-0">
+                                            <div class="col-5">
+                                                <p>Confort</p>
+                                            </div>
+                                            <div class="col-7">
+                                                <div class="col-12 px-0" dmx-repeat="scVehicleDetails.data.Equipments[0].Confort">
+                                                    <p>{{scVehicleDetails.data.Equipments[0].Confort[$index]}}</p>
+                                                </div>
+                                                <!--  -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="row mx-0">
+                                            <div class="col-5">
+                                                <p>Divers</p>
+                                            </div>
+                                            <div class="col-7">
+                                                <div class="col-12 px-0" dmx-repeat="scVehicleDetails.data.Equipments[0].Divers">
+                                                    <p>{{scVehicleDetails.data.Equipments[0].Divers[$index]}}</p>
+                                                </div>
+                                                <!--  -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="row mx-0">
+                                            <div class="col-5">
+                                                <p>Etat</p>
+                                            </div>
+                                            <div class="col-7">
+                                                <div class="col-12 px-0" dmx-repeat="scVehicleDetails.data.Equipments[0].Etat">
+                                                    <p>{{scVehicleDetails.data.Equipments[0].Etat[$index]}}</p>
+                                                </div>
+                                                <!--  -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="row mx-0">
+                                            <div class="col-5">
+                                                <p>Multimédia</p>
+                                            </div>
+                                            <div class="col-7">
+                                                <div class="col-12 px-0" dmx-repeat="scVehicleDetails.data.Equipments[0].Multimédia">
+                                                    <p>{{scVehicleDetails.data.Equipments[0].Multimédia[$index]}}</p>
+                                                </div>
+                                                <!--  -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="row mx-0">
+                                            <div class="col-5">
+                                                <p>Intérieur</p>
+                                            </div>
+                                            <div class="col-7">
+                                                <div class="col-12 px-0" dmx-repeat="scVehicleDetails.data.Equipments[0].Intérieur">
+                                                    <p>{{scVehicleDetails.data.Equipments[0].Intérieur[$index]}}</p>
+                                                </div>
+                                                <!--  -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="row mx-0">
+                                            <div class="col-5">
+                                                <p>Général</p>
+                                            </div>
+                                            <div class="col-7">
+                                                <div class="col-12 px-0" dmx-repeat="scVehicleDetails.data.Equipments[0].Général">
+                                                    <p>{{scVehicleDetails.data.Equipments[0].Général[$index]}}</p>
+                                                </div>
+                                                <!--  -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="row mx-0">
+                                            <div class="col-5">
+                                                <p>Sécurité</p>
+                                            </div>
+                                            <div class="col-7">
+                                                <div class="col-12 px-0" dmx-repeat="scVehicleDetails.data.Equipments[0].Sécurité">
+                                                    <p>{{scVehicleDetails.data.Equipments[0].Sécurité[$index]}}</p>
+                                                </div>
+                                                <!--  -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <a class="btn orange-btn collapsed text-light font-weight-bold" data-bs-toggle="collapse" href="#collapseThree">
+                                <div class="card-headerr text-start py-1">
+                                    Données techniques
+                                </div>
+                            </a>
+                            <div id="collapseThree" class="collapse" data-bs-parent="#accordion">
+                                <div class="card-body">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
                     <ul class="nav nav-tabs">
-                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#vehicle-overview">EQUIPEMENTS PRINCIPAUX</a>
+                        <li class="nav-item active"> <a class="nav-link" data-toggle="tab" href="#vehicle-overview">EQUIPEMENTS PRINCIPAUX</a>
                         </li>
-                        <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#tech-spec">EQUIPEMENTS</a>
+                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tech-spec">EQUIPEMENTS</a>
                         </li>
                         <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#accessories">DONNÉES TECHNIQUES</a>
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane fade" id="vehicle-overview">
+                        <div class="tab-pane active" id="vehicle-overview">
                             <div class="car-details-box">
                                 <div class="text-wrapper">
                                     <h4 class="text-light-black">What is Lorem Ipsum?</h4>
@@ -71,7 +235,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane active" id="tech-spec">
+                        <div class="tab-pane fade" id="tech-spec">
                             <div class="car-details-box">
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
@@ -234,28 +398,37 @@
             <aside class="col-lg-4">
                 <div class="side-search-bar h-auto mb-4">
                     <div class="title-icon">
-                        <h5 class="title"><i class="far fa-user"></i>Car Name</h5>
+                        <h5 class="title">{{scVehicleDetails.data.customDetails[0].LowestPrice}} <i class="fa fa-euro-sign" aria-hidden="true"></i></h5>
                     </div>
                     <div class="widget-search-filter">
                         <div class="widget-content">
                             <div class="author-sec">
                                 <div class="author-img">
-                                    <img src="assets/images/cardetails/user-1a.jpg" class="rounded-circle" alt="Author Image">
+                                    <span><i class="icon-car"></i></span>
                                 </div>
                                 <div class="author-info">
-                                    <h6><a href="#" class="text-light-black"> Mares Jean</a></h6>
-                                    <p class="text-dark-grey">Since: March, 2022</p>
+                                    <h6><a href="#" class="text-light-black">{{scVehicleDetails.data.customDetails[0].Brand}}</a></h6>
+                                    <p class="text-dark-grey">{{scVehicleDetails.data.customDetails[0].Model}}</p>
                                 </div>
                             </div>
                             <div class="contact-details">
                                 <ul>
                                     <li class="text-dark-grey"> <span><i class="fas fa-map-marker-alt"></i></span>
-                                        1327 Intervale Ave, Bronx, NY</li>
+                                        {{scVehicleDetails.data.customDetails[0].Energie}}</li>
                                     <li class="text-dark-grey"> <span><i class="fas fa-phone-alt"></i></span>
-                                        <a href="#" class="text-dark-grey">+08 (123) 456 99</a>
+                                        <a href="#" class="text-dark-grey">{{scVehicleDetails.data.customDetails[0].Puissance}}</a>
                                     </li>
                                     <li class="text-dark-grey"> <span><i class="fas fa-envelope"></i></span>
-                                        <a href="#" class="text-dark-grey">information@domain.com</a>
+                                        <a href="#" class="text-dark-grey">{{scVehicleDetails.data.customDetails[0].Transmission}}</a>
+                                    </li>
+                                    <li class="text-dark-grey"> <span><i class="fas fa-envelope"></i></span>
+                                        <a href="#" class="text-dark-grey">{{scVehicleDetails.data.customDetails[0].Type_de_vehicule}}</a>
+                                    </li>
+                                    <li class="text-dark-grey"> <span><i class="fas fa-envelope"></i></span>
+                                        <a href="#" class="text-dark-grey">{{scVehicleDetails.data.customDetails[0].Couleur}}</a>
+                                    </li>
+                                    <li class="text-dark-grey"> <span><i class="fas fa-envelope"></i></span>
+                                        <a href="#" class="text-dark-grey">{{scVehicleDetails.data.customDetails[0].Carrosserie}}</a>
                                     </li>
                                 </ul>
                             </div>

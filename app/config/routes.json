@@ -12,7 +12,7 @@
       "layout": "main"
     },
     {
-      "path": "/vehicle-details",
+      "path": "/vehicle-details/:id/:model",
       "page": "vehicle-details",
       "layout": "main"
     },

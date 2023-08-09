@@ -10,6 +10,296 @@
   "exec": {
     "steps": [
       {
+        "name": "customDetails",
+        "module": "dbupdater",
+        "action": "custom",
+        "options": {
+          "connection": "autonetDB",
+          "sql": {
+            "query": "SELECT vd.id AS 'VehicleID',vd.Brand, vd.Model, vd.Tarif,  vd.Lieu,  vd.cm3, vd.Puissance, vd.Energie, vd.Type_de_vehicule, vd.Transmission, vd.Carrosserie, vd.Couleur, vd.Equipements_principaux,vd.Equipements,\nMIN(ROUND(((vd.Tarif + si.price + se.price) + (vd.Tarif + si.price + se.price) * (ti.OM + ti.OMR + ti.TVA) / 100) * 1.15, 0)) AS 'LowestPrice'\nFROM vehicle_data vd\nJOIN Shipping_int si ON vd.Lieu = si.`from`\nJOIN Shipping_ext se ON si.`to` = se.`from`\nJOIN tax_import ti ON vd.cm3 BETWEEN ti.cy_min AND ti.cy_max\nWHERE ti.territoire = 'PTP' AND vd.id = @vehicle_id\nGROUP BY vd.id;\n",
+            "params": [
+              {
+                "name": "@vehicle_id",
+                "value": "{{$_GET.vehicle_id}}",
+                "test": "1"
+              }
+            ]
+          }
+        },
+        "output": true,
+        "meta": [
+          {
+            "name": "VehicleID",
+            "type": "number"
+          },
+          {
+            "name": "Brand",
+            "type": "text"
+          },
+          {
+            "name": "Model",
+            "type": "text"
+          },
+          {
+            "name": "Tarif",
+            "type": "number"
+          },
+          {
+            "name": "Lieu",
+            "type": "text"
+          },
+          {
+            "name": "cm3",
+            "type": "number"
+          },
+          {
+            "name": "Puissance",
+            "type": "text"
+          },
+          {
+            "name": "Energie",
+            "type": "text"
+          },
+          {
+            "name": "Type_de_vehicule",
+            "type": "text"
+          },
+          {
+            "name": "Transmission",
+            "type": "text"
+          },
+          {
+            "name": "Carrosserie",
+            "type": "text"
+          },
+          {
+            "name": "Couleur",
+            "type": "text"
+          },
+          {
+            "name": "LowestPrice",
+            "type": "number"
+          }
+        ],
+        "outputType": "array"
+      },
+      {
+        "name": "A",
+        "module": "core",
+        "action": "setvalue",
+        "options": {
+          "value": "{{customDetails[0].Equipements_principaux.replace('\\'', '\"')}}"
+        },
+        "meta": [
+          {
+            "name": "VehicleID",
+            "type": "number"
+          },
+          {
+            "name": "Brand",
+            "type": "text"
+          },
+          {
+            "name": "Model",
+            "type": "text"
+          },
+          {
+            "name": "Tarif",
+            "type": "number"
+          },
+          {
+            "name": "Lieu",
+            "type": "text"
+          },
+          {
+            "name": "cm3",
+            "type": "number"
+          },
+          {
+            "name": "Puissance",
+            "type": "text"
+          },
+          {
+            "name": "Energie",
+            "type": "text"
+          },
+          {
+            "name": "Type_de_vehicule",
+            "type": "text"
+          },
+          {
+            "name": "Transmission",
+            "type": "text"
+          },
+          {
+            "name": "Carrosserie",
+            "type": "text"
+          },
+          {
+            "name": "Couleur",
+            "type": "text"
+          },
+          {
+            "name": "LowestPrice",
+            "type": "number"
+          }
+        ],
+        "outputType": "text",
+        "output": false
+      },
+      {
+        "name": "Equipements_principaux",
+        "module": "core",
+        "action": "setvalue",
+        "options": {
+          "value": "{{A.parseJSON()}}"
+        },
+        "meta": [
+          {
+            "name": "VehicleID",
+            "type": "number"
+          },
+          {
+            "name": "Brand",
+            "type": "text"
+          },
+          {
+            "name": "Model",
+            "type": "text"
+          },
+          {
+            "name": "Tarif",
+            "type": "number"
+          },
+          {
+            "name": "Lieu",
+            "type": "text"
+          },
+          {
+            "name": "cm3",
+            "type": "number"
+          },
+          {
+            "name": "Puissance",
+            "type": "text"
+          },
+          {
+            "name": "Energie",
+            "type": "text"
+          },
+          {
+            "name": "Type_de_vehicule",
+            "type": "text"
+          },
+          {
+            "name": "Transmission",
+            "type": "text"
+          },
+          {
+            "name": "Carrosserie",
+            "type": "text"
+          },
+          {
+            "name": "Couleur",
+            "type": "text"
+          },
+          {
+            "name": "LowestPrice",
+            "type": "number"
+          }
+        ],
+        "outputType": "text",
+        "output": true
+      },
+      {
+        "name": "Equipments",
+        "module": "core",
+        "action": "setvalue",
+        "options": {
+          "value": "{{customDetails[0].Equipements.parseJSON()}}"
+        },
+        "meta": [
+          {
+            "name": "VehicleID",
+            "type": "number"
+          },
+          {
+            "name": "Brand",
+            "type": "text"
+          },
+          {
+            "name": "Model",
+            "type": "text"
+          },
+          {
+            "name": "Tarif",
+            "type": "number"
+          },
+          {
+            "name": "Lieu",
+            "type": "text"
+          },
+          {
+            "name": "cm3",
+            "type": "number"
+          },
+          {
+            "name": "Puissance",
+            "type": "text"
+          },
+          {
+            "name": "Energie",
+            "type": "text"
+          },
+          {
+            "name": "Type_de_vehicule",
+            "type": "text"
+          },
+          {
+            "name": "Transmission",
+            "type": "text"
+          },
+          {
+            "name": "Carrosserie",
+            "type": "text"
+          },
+          {
+            "name": "Couleur",
+            "type": "text"
+          },
+          {
+            "name": "LowestPrice",
+            "type": "number"
+          }
+        ],
+        "outputType": "text",
+        "output": true
+      },
+      {
+        "name": "C",
+        "module": "core",
+        "action": "setvalue",
+        "options": {
+          "value": "{{B.replace('\\'', '\"')}}"
+        },
+        "meta": [],
+        "outputType": "text",
+        "output": true,
+        "disabled": true
+      },
+      {
+        "name": "Equipements",
+        "module": "core",
+        "action": "setvalue",
+        "options": {
+          "value": "{{C.parseJSON()}}"
+        },
+        "meta": [],
+        "outputType": "text",
+        "output": true,
+        "disabled": true
+      },
+      {
         "name": "query",
         "module": "dbconnector",
         "action": "single",
@@ -189,63 +479,7 @@
             "name": "cm3"
           }
         ],
-        "outputType": "object"
-      },
-      {
-        "name": "A",
-        "module": "core",
-        "action": "setvalue",
-        "options": {
-          "value": "{{query.Equipements_principaux.replace('\\'', '\"')}}"
-        },
-        "meta": [],
-        "outputType": "text",
-        "output": false
-      },
-      {
-        "name": "Equipements_principaux",
-        "module": "core",
-        "action": "setvalue",
-        "options": {
-          "value": "{{A.parseJSON()}}"
-        },
-        "meta": [],
-        "outputType": "text",
-        "output": true
-      },
-      {
-        "name": "B",
-        "module": "core",
-        "action": "setvalue",
-        "options": {
-          "value": "{{query.Equipements.parseJSON()}}"
-        },
-        "meta": [],
-        "outputType": "text",
-        "output": true
-      },
-      {
-        "name": "C",
-        "module": "core",
-        "action": "setvalue",
-        "options": {
-          "value": "{{B.replace('\\'', '\"')}}"
-        },
-        "meta": [],
-        "outputType": "text",
-        "output": true,
-        "disabled": true
-      },
-      {
-        "name": "Equipements",
-        "module": "core",
-        "action": "setvalue",
-        "options": {
-          "value": "{{C.parseJSON()}}"
-        },
-        "meta": [],
-        "outputType": "text",
-        "output": true,
+        "outputType": "object",
         "disabled": true
       },
       {
@@ -253,7 +487,7 @@
         "module": "dbupdater",
         "action": "custom",
         "options": {
-          "connection": "autonetdb",
+          "connection": "autonetDB",
           "sql": {
             "query": "SELECT vd.id AS 'VehicleID', vd.Brand, vd.Model, vd.Tarif, vd.Lieu, si.price AS 'TransportTerrestre',\n       si.`to` AS 'PortDEP', si.shipper AS 'Transporteur', se.`to` AS 'Port DEST',\n       se.price AS 'TransportMaritime', se.shipper AS 'ShipperExt', se.`to` AS 'PortDESTExt',\n       vd.cm3, ti.OM, ti.OMR, ti.TVA,\n       ROUND(((vd.Tarif + si.price + se.price) + (vd.Tarif + si.price + se.price) * (ti.OM + ti.OMR + ti.TVA) / 100) * 1.15, 0) AS 'Prix_de_vente'\nFROM vehicle_data vd\nJOIN Shipping_int si ON vd.Lieu = si.`from`\nJOIN Shipping_ext se ON si.`to` = se.`from`\nJOIN tax_import ti ON vd.cm3 BETWEEN ti.cy_min AND ti.cy_max\nWHERE ti.territoire = 'PTP'\nAND ((vd.Tarif + si.price + se.price) + (vd.Tarif + si.price + se.price) * (ti.OM + ti.OMR + ti.TVA) / 100) * 1.15 =\n    (SELECT MIN(((vd.Tarif + si.price + se.price) + (vd.Tarif + si.price + se.price) * (ti.OM + ti.OMR + ti.TVA) / 100) * 1.15)\n     FROM vehicle_data vd\n     JOIN Shipping_int si ON vd.Lieu = si.`from`\n     JOIN Shipping_ext se ON si.`to` = se.`from`\n     JOIN tax_import ti ON vd.cm3 BETWEEN ti.cy_min AND ti.cy_max\n     WHERE ti.territoire = 'PTP'\n     AND vd.id = vd.id  AND vd.id=@vehicle_id) AND vd.id=@vehicle_id",
             "params": [
@@ -335,7 +569,9 @@
             "name": "Prix_de_vente",
             "type": "number"
           }
-        ]
+        ],
+        "outputType": "array",
+        "disabled": true
       }
     ]
   }

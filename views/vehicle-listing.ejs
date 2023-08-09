@@ -1,9 +1,11 @@
-<!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="vehiclelisting" appConnect="local" components="{dmxBootstrap5Navigation:{}}" -->
+<!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="vehiclelisting" appConnect="local" components="{dmxBootstrap5Navigation:{},dmxDataTraversal:{},dmxFormatter:{}}" -->
 <meta name="ac:route" content="/vehicle-listing">
 <!-- listing -->
 <dmx-serverconnect id="scVehicleData" url="/api/Vehicle/VehicleData"></dmx-serverconnect>
+<dmx-data-view id="dvVehicleData" dmx-bind:data="content.scVehicleData.data.customVehicle" filter=""></dmx-data-view>
 <dmx-serverconnect id="scBrands" url="/api/Brand/Brands"></dmx-serverconnect>
 <dmx-serverconnect id="scVehicleCondition" url="/api/Vehicle/VehicleConditon"></dmx-serverconnect>
+<dmx-serverconnect id="scVehicleBodyType" url="/api/Vehicle/VehicleType"></dmx-serverconnect>
 <div class="section-padding listing-with-map listing-with-map-2 style-2-map-2">
     <div class="container-fluid">
         <div class="row">
@@ -14,29 +16,24 @@
                     </div>
                     <div class="widget-search-filter">
                         <div class="widget-content">
-                            <form>
+                            <form id="formFilter">
                                 <div class="form-group">
                                     <input type="text" name="#" class="form-control form-control-custom" placeholder="What are you looking for?">
                                 </div>
                                 <div class="form-group">
-                                    <select id="selectBrands" class="form-select py-2" dmx-bind:options="scBrands.data.query" optiontext="Brand" optionvalue="Brand" dmx-on:changed="scVehicleData.load({brand: value})">
+                                    <select id="selectBrands" class="form-select py-2" dmx-bind:options="scBrands.data.query" optiontext="Brand" optionvalue="Brand">
                                         <option value="" disabled="true">Select Brand</option>
                                     </select>
                                 </div>
+                                <!-- dmx-on:changed="scVehicleData.load({brand: value})" -->
                                 <div class="form-group">
                                     <select class="form-select py-2" id="VehicleCondition" dmx-bind:options="content.scVehicleCondition.data.query" optiontext="Type_de_vehicule" optionvalue="Type_de_vehicule">
                                         <option value="" disabled="true">Filter By Condition</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <select class="form-select py-2">
-                                        <option>Filter By City</option>
-                                        <option>City one</option>
-                                        <option>City Two</option>
-                                        <option>City Three</option>
-                                        <option>City Four</option>
-                                        <option>City Five</option>
-                                        <option>City Six</option>
+                                    <select class="form-select py-2" id="selectBodyType" dmx-bind:options="scVehicleBodyType.data.query" optiontext="Carrosserie" optionvalue="Carrosserie">
+                                        <option value="" disabled="true">Filter By Type</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -93,7 +90,7 @@
                     <div class="col-lg-12">
                         <div class="right-search-filter-box">
                             <div class="search-filter-options mb-0">
-                                <h5 class="title2 no-margin">Cars <small class="text-dark-white fw-400 rubik">Showing {{scVehicleData.data.customVehicle.length}} results</small></h5>
+                                <h5 class="title2 no-margin">Cars <small class="text-dark-white fw-400 rubik">Showing {{dvVehicleData.data.length}} results</small></h5>
                                 <div class="filter-by-grid-list"> <span>View As</span>
                                     <div class="filter-tab-area">
                                         <ul class="nav nav-tabs" role="tablist">
@@ -109,7 +106,7 @@
                             <div class="right-section-car-box">
                                 <div class="tab-content">
                                     <div id="listing_grid" class="tab-pane active">
-                                        <div class="row ovrflow-slider-2" is="dmx-repeat" id="repeatVehicle" dmx-bind:repeat="scVehicleData.data.customVehicle" key="VehicleID">
+                                        <div class="row ovrflow-slider-2" is="dmx-repeat" id="repeatVehicle" dmx-bind:repeat="dvVehicleData.data" key="VehicleID">
                                             <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-12">
                                                 <div class="car-grid-layout-box">
                                                     <div class="car-grid-layout-inner text-center">
@@ -131,14 +128,16 @@
                                         </div>
                                     </div>
                                     <div id="listing_list" class="tab-pane fade">
-                                        <div class="row ovrflow-slider-2" is="dmx-repeat" id="repeatVehicleList" dmx-bind:repeat="scVehicleData.data.customVehicle" key="VehicleID">
+                                        <div class="row ovrflow-slider-2" is="dmx-repeat" id="repeatVehicleList" dmx-bind:repeat="dvVehicleData.data" key="VehicleID">
                                             <div class="col-12">
                                                 <div class="car-model-layout-list-2">
-                                                    <div class="car-thumbnail-area">
-                                                        <div class="item-thumb">
-                                                            <img src="#" dmx-bind:src="Vehicle_Image" class="img-fluid full-width" alt="image">
+                                                    <a href="#" dmx-bind:href="'vehicle-details/'+VehicleID+'/'+Model">
+                                                        <div class="car-thumbnail-area">
+                                                            <div class="item-thumb">
+                                                                <img src="#" dmx-bind:src="Vehicle_Image" class="img-fluid full-width" alt="image">
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    </a>
                                                     <div class="car-description-area">
                                                         <div class="car-description-content">
                                                             <h5 class="title"><a href="#" class="text-light-black">{{Brand}}</a> <span class="text-orange float-right custom-tooltip" data-tip="Add to compare"><i class="flaticon-add"></i></span></h5>
