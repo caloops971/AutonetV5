@@ -2,10 +2,15 @@
 <meta name="ac:route" content="/vehicle-listing">
 <!-- listing -->
 <dmx-serverconnect id="scVehicleData" url="/api/Vehicle/VehicleData"></dmx-serverconnect>
-<dmx-data-view id="dvVehicleData" dmx-bind:data="content.scVehicleData.data.customVehicle" filter=""></dmx-data-view>
+<dmx-data-view id="dvVehicleData" dmx-bind:data="scVehicleData.data.customVehicle"></dmx-data-view>
 <dmx-serverconnect id="scBrands" url="/api/Brand/Brands"></dmx-serverconnect>
 <dmx-serverconnect id="scVehicleCondition" url="/api/Vehicle/VehicleConditon"></dmx-serverconnect>
 <dmx-serverconnect id="scVehicleBodyType" url="/api/Vehicle/VehicleType"></dmx-serverconnect>
+<script is="dmx-flow" id="flowChecked" type="text/dmx-flow">{
+  run: {
+    action: "{{scVehicleData.load({brand: content.formFilter.selectBrands.value, type_de_vehicule: content.formFilter.VehicleCondition.value, carrosserie: content.formFilter.selectBodyType.value, killomiterage: content.formFilter.killomiterage.value, automatique: (content.formFilter.Automatique.checked?content.formFilter.Automatique.value:''), manuel: (content.formFilter.Manuel.checked?content.formFilter.Manuel.value:''), electrique: (content.formFilter.Electrique.checked?content.formFilter.Electrique.value:''), diesel: (content.formFilter.Diesel.checked?content.formFilter.Diesel.value:''), essence: (content.formFilter.Essence.checked?content.formFilter.Essence.value:'')})}}"
+  }
+}</script>
 <div class="section-padding listing-with-map listing-with-map-2 style-2-map-2">
     <div class="container-fluid">
         <div class="row">
@@ -21,30 +26,30 @@
                                     <input type="text" name="#" class="form-control form-control-custom" placeholder="What are you looking for?">
                                 </div>
                                 <div class="form-group">
-                                    <select id="selectBrands" class="form-select py-2" dmx-bind:options="scBrands.data.query" optiontext="Brand" optionvalue="Brand">
-                                        <option value="" disabled="true">Select Brand</option>
+                                    <select id="selectBrands" class="form-select py-2" dmx-bind:options="scBrands.data.query" optiontext="Brand" optionvalue="Brand" dmx-on:changed="flowChecked.run()">
+                                        <option value="">Select Brand</option>
                                     </select>
                                 </div>
                                 <!-- dmx-on:changed="scVehicleData.load({brand: value})" -->
                                 <div class="form-group">
-                                    <select class="form-select py-2" id="VehicleCondition" dmx-bind:options="content.scVehicleCondition.data.query" optiontext="Type_de_vehicule" optionvalue="Type_de_vehicule">
-                                        <option value="" disabled="true">Filter By Condition</option>
+                                    <select class="form-select py-2" id="VehicleCondition" dmx-bind:options="content.scVehicleCondition.data.query" optiontext="Type_de_vehicule" optionvalue="Type_de_vehicule" dmx-on:changed="flowChecked.run()">
+                                        <option value="">Filter By Condition</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <select class="form-select py-2" id="selectBodyType" dmx-bind:options="scVehicleBodyType.data.query" optiontext="Carrosserie" optionvalue="Carrosserie">
-                                        <option value="" disabled="true">Filter By Type</option>
+                                    <select class="form-select py-2" id="selectBodyType" dmx-bind:options="scVehicleBodyType.data.query" optiontext="Carrosserie" optionvalue="Carrosserie" dmx-on:changed="flowChecked.run()">
+                                        <option value="">Filter By Type</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <div class="search-distance-value">Radius:
-                                        <input type="text" class="range-slider-value distance-value" readonly>
+                                        <input type="text" id="killomiterage" class="range-slider-value distance-value" dmx-on:changed="flowChecked.run()" readonly>
                                     </div>
                                     <div id="search_distance"></div>
                                 </div>
                                 <div class="form-group">
                                     <div class="search-search-price">Prix: € 0 - 100000
-                                        <input type="text" class="range-slider-value price-value" readonly>
+                                        <input type="text" id="Price" class="range-slider-value price-value" readonly>
                                     </div>
                                     <div id="search_price"></div>
                                 </div>
@@ -52,11 +57,14 @@
                                     <div class="tags-form-group">
                                         <div class="form-group">
                                             <label class="custom-checkbox">
-                                                <input type="checkbox" name="#"> <span class="checkmark"></span> Automatique</label>
+                                                <input type="checkbox" id="Automatique" value="Automatique" dmx-on:changed="flowChecked.run()"> <span class="checkmark"></span> Automatique</label>
+                                            <!-- <input type="hidden" name="Automatique" id="Auto" dmx-bind:value="Automatique.checked?Automatique.value:''" dmx-bind:disabled="!Automatique.checked"> -->
                                         </div>
                                         <div class="form-group">
                                             <label class="custom-checkbox">
-                                                <input type="checkbox" name="#"> <span class="checkmark"></span> Manuel</label>
+                                                <input type="checkbox" id="Manuel" value="Manuel" dmx-on:changed="flowChecked.run()">
+                                                <span class="checkmark"></span> Manuel</label>
+                                            <!-- <input type="hidden" name="Manuel" id="Manual" dmx-bind:value="Manuel.checked?Manuel.value:''" dmx-bind:disabled="!Manuel.checked"> -->
                                         </div>
 
                                     </div>
@@ -65,19 +73,22 @@
                                     <div class="tags-form-group">
                                         <div class="form-group">
                                             <label class="custom-checkbox">
-                                                <input type="checkbox" name="#"> <span class="checkmark"></span> Electrique</label>
+                                                <input type="checkbox" id="Electrique" value="Electrique" dmx-on:changed="flowChecked.run()"> <span class="checkmark"></span> Electrique</label>
+                                            <!-- <input type="hidden" name="Electrique" id="Elect" dmx-bind:value="Electrique.checked?Electrique.value:''" dmx-bind:disabled="!Electrique.checked"> -->
                                         </div>
                                         <div class="form-group">
                                             <label class="custom-checkbox">
-                                                <input type="checkbox" name="#"> <span class="checkmark"></span> Diesel</label>
+                                                <input type="checkbox" id="Diesel" value="Diesel" dmx-on:changed="flowChecked.run()"> <span class="checkmark"></span> Diesel</label>
+                                            <!-- <input type="hidden" name="Diesel" id="Dies" dmx-bind:value="Diesel.checked?Diesel.value:''" dmx-bind:disabled="!Diesel.checked"> -->
                                         </div>
                                         <div class="form-group">
                                             <label class="custom-checkbox">
-                                                <input type="checkbox" name="#"> <span class="checkmark"></span> Essence</label>
+                                                <input type="checkbox" id="Essence" value="Essence" dmx-on:changed="flowChecked.run()"> <span class="checkmark"></span> Essence</label>
+                                            <!-- <input type="hidden" name="Essence" id="Ess" dmx-bind:value="Essence.checked?Essence.value:''" dmx-bind:disabled="!Essence.checked"> -->
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-submit text-center">
+                                <div class="form-submit text-center d-none">
                                     <button type="submit" class="btn-second orange-btn">APPLY FILTER</button>
                                 </div>
                             </form>
@@ -113,9 +124,11 @@
                                                         <h5 class="car-name"><a href="#" class="text-light-black">{{Brand}}</a></h5>
                                                         <h6 class="text-light-black text-uppercase mb-2">{{Model}}</h6>
                                                         <p class="text-dark-grey">{{Energie}}</p> <span class="text-orange price-text">{{LowestPrice}} €</span>
-                                                        <div class="car-grid-layout-img">
-                                                            <img src="#" dmx-bind:src="Vehicle_Image" class="img-fluid full-width" alt="Car img">
-                                                        </div>
+                                                        <a href="#" dmx-bind:href="'vehicle-details/'+VehicleID+'/'+Model">
+                                                            <div class="car-grid-layout-img">
+                                                                <img src="#" dmx-bind:src="Vehicle_Image?Vehicle_Image:'assets/images/surprise_car.jpg'" class="img-fluid full-width" alt="Car img">
+                                                            </div>
+                                                        </a>
                                                         <div class="car-grid-layout-details"> <span class="text-dark-white"><i class="flaticon-dashboard text-orange mr-2"></i> {{Kilometrage}}</span>
                                                             <span class="text-dark-white p-relative"><i class="icon-car"></i> {{Carrosserie}}</span>
                                                         </div>
@@ -134,7 +147,7 @@
                                                     <a href="#" dmx-bind:href="'vehicle-details/'+VehicleID+'/'+Model">
                                                         <div class="car-thumbnail-area">
                                                             <div class="item-thumb">
-                                                                <img src="#" dmx-bind:src="Vehicle_Image" class="img-fluid full-width" alt="image">
+                                                                <img src="#" dmx-bind:src="Vehicle_Image?Vehicle_Image:'assets/images/surprise_car.jpg'" class="img-fluid full-width" alt="image">
                                                             </div>
                                                         </div>
                                                     </a>

@@ -1,8 +1,4 @@
 {
-  "vehicle-listing.ejs": {
-    "layoutPage": "main",
-    "description": ""
-  },
   "vehicle-details.ejs": {
     "layoutPage": "main",
     "description": ""
@@ -12,6 +8,10 @@
     "description": ""
   },
   "about.ejs": {
+    "layoutPage": "main",
+    "description": ""
+  },
+  "vehicle-listing.ejs": {
     "layoutPage": "main",
     "description": ""
   }

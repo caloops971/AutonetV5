@@ -3,23 +3,31 @@
     "$_GET": [
       {
         "type": "text",
-        "name": "offset"
-      },
-      {
-        "type": "text",
-        "name": "limit"
-      },
-      {
-        "type": "text",
-        "name": "sort"
-      },
-      {
-        "type": "text",
-        "name": "dir"
-      },
-      {
-        "type": "text",
         "name": "brand"
+      },
+      {
+        "type": "text",
+        "name": "type_de_vehicule"
+      },
+      {
+        "type": "text",
+        "name": "carrosserie"
+      },
+      {
+        "type": "text",
+        "name": "killomiterage"
+      },
+      {
+        "type": "text",
+        "name": "automatique"
+      },
+      {
+        "type": "text",
+        "name": "manuel"
+      },
+      {
+        "type": "text",
+        "name": "electrique"
       },
       {
         "type": "text",
@@ -28,10 +36,6 @@
       {
         "type": "text",
         "name": "essence"
-      },
-      {
-        "type": "text",
-        "name": "electrique"
       }
     ]
   },
@@ -47,1459 +51,229 @@
             "module": "core",
             "action": "condition",
             "options": {
-              "if": "{{($_GET.brand||$_GET.diesel||$_GET.essence||$_GET.electrique)}}",
+              "if": "{{($_GET.brand||$_GET.type_de_vehicule||$_GET.carrosseriece||$_GET.killomiterage||$_GET.automatique||$_GET.manuel||$_GET.electrique||$_GET.diesel||$_GET.essence)}}",
               "then": {
-                "steps": [
-                  {
-                    "name": "",
-                    "module": "core",
-                    "action": "condition",
-                    "options": {
-                      "if": "{{$_GET.brand}}",
-                      "then": {
-                        "steps": [
-                          {
-                            "name": "customVehicle",
-                            "module": "dbupdater",
-                            "action": "custom",
-                            "options": {
-                              "connection": "autonetDB",
-                              "sql": {
-                                "query": "SELECT vd.id AS 'VehicleID',vd.Brand, vd.Model, vd.Tarif,  vd.Lieu,  vd.cm3, vd.Puissance, vd.Energie, vd.Type_de_vehicule, vd.Transmission, vd.Carrosserie, vd.Couleur,ti.territoire, vd.Kilometrage, vd.Premiere_mise_en_circulation, vd.Emissions_de_CO2_1, vd.Energie, vd.Vehicle_Image,\nMIN(ROUND(((vd.Tarif + si.price + se.price) + (vd.Tarif + si.price + se.price) * (ti.OM + ti.OMR + ti.TVA) / 100) * 1.15, 0)) AS 'LowestPrice'\nFROM vehicle_data vd\nJOIN Shipping_int si ON vd.Lieu = si.`from`\nJOIN Shipping_ext se ON si.`to` = se.`from`\nJOIN tax_import ti ON vd.cm3 BETWEEN ti.cy_min AND ti.cy_max\nWHERE ti.territoire = 'PTP' AND vd.Brand=@brand AND vd.Disponibilite='immédiatement'\nGROUP BY vd.id;",
-                                "params": [
-                                  {
-                                    "name": "@brand",
-                                    "value": "{{$_GET.brand}}",
-                                    "test": "Opel"
-                                  }
-                                ]
-                              }
-                            },
-                            "output": true,
-                            "meta": [
-                              {
-                                "name": "VehicleID",
-                                "type": "number"
-                              },
-                              {
-                                "name": "Brand",
-                                "type": "text"
-                              },
-                              {
-                                "name": "Model",
-                                "type": "text"
-                              },
-                              {
-                                "name": "Tarif",
-                                "type": "number"
-                              },
-                              {
-                                "name": "Lieu",
-                                "type": "text"
-                              },
-                              {
-                                "name": "cm3",
-                                "type": "number"
-                              },
-                              {
-                                "name": "Puissance",
-                                "type": "text"
-                              },
-                              {
-                                "name": "Energie",
-                                "type": "text"
-                              },
-                              {
-                                "name": "Type_de_vehicule",
-                                "type": "text"
-                              },
-                              {
-                                "name": "Transmission",
-                                "type": "text"
-                              },
-                              {
-                                "name": "Carrosserie",
-                                "type": "text"
-                              },
-                              {
-                                "name": "Couleur",
-                                "type": "text"
-                              },
-                              {
-                                "name": "territoire",
-                                "type": "text"
-                              },
-                              {
-                                "name": "Kilometrage",
-                                "type": "text"
-                              },
-                              {
-                                "name": "Premiere_mise_en_circulation",
-                                "type": "text"
-                              },
-                              {
-                                "name": "Emissions_de_CO2_1",
-                                "type": "text"
-                              },
-                              {
-                                "name": "Energie",
-                                "type": "text"
-                              },
-                              {
-                                "name": "Vehicle_Image",
-                                "type": "text"
-                              },
-                              {
-                                "name": "LowestPrice",
-                                "type": "number"
-                              }
-                            ]
-                          },
-                          {
-                            "name": "query",
-                            "module": "dbconnector",
-                            "action": "paged",
-                            "options": {
-                              "connection": "autonetDB",
-                              "sql": {
-                                "type": "select",
-                                "columns": [],
-                                "params": [
-                                  {
-                                    "operator": "equal",
-                                    "type": "expression",
-                                    "name": ":P1",
-                                    "value": "{{$_GET.brand}}",
-                                    "test": ""
-                                  }
-                                ],
-                                "table": {
-                                  "name": "vehicle_data"
-                                },
-                                "primary": "id",
-                                "joins": [],
-                                "wheres": {
-                                  "condition": "AND",
-                                  "rules": [
-                                    {
-                                      "id": "vehicle_data.Type_de_vehicule",
-                                      "field": "vehicle_data.Type_de_vehicule",
-                                      "type": "string",
-                                      "operator": "equal",
-                                      "value": "Véhicule 0KM",
-                                      "data": {
-                                        "table": "vehicle_data",
-                                        "column": "Type_de_vehicule",
-                                        "type": "text",
-                                        "columnObj": {
-                                          "type": "string",
-                                          "maxLength": 255,
-                                          "primary": false,
-                                          "nullable": true,
-                                          "name": "Type_de_vehicule"
-                                        }
-                                      },
-                                      "operation": "="
-                                    },
-                                    {
-                                      "id": "vehicle_data.Disponibilite",
-                                      "field": "vehicle_data.Disponibilite",
-                                      "type": "string",
-                                      "operator": "equal",
-                                      "value": "immédiatement",
-                                      "data": {
-                                        "table": "vehicle_data",
-                                        "column": "Disponibilite",
-                                        "type": "text",
-                                        "columnObj": {
-                                          "type": "string",
-                                          "maxLength": 255,
-                                          "primary": false,
-                                          "nullable": true,
-                                          "name": "Disponibilite"
-                                        }
-                                      },
-                                      "operation": "="
-                                    },
-                                    {
-                                      "id": "vehicle_data.Brand",
-                                      "field": "vehicle_data.Brand",
-                                      "type": "string",
-                                      "operator": "equal",
-                                      "value": "{{$_GET.brand}}",
-                                      "data": {
-                                        "table": "vehicle_data",
-                                        "column": "Brand",
-                                        "type": "text",
-                                        "columnObj": {
-                                          "type": "string",
-                                          "maxLength": 255,
-                                          "primary": false,
-                                          "nullable": true,
-                                          "name": "Brand"
-                                        }
-                                      },
-                                      "operation": "="
-                                    }
-                                  ],
-                                  "conditional": null,
-                                  "valid": true
-                                },
-                                "query": "select * from `vehicle_data` where `vehicle_data`.`Type_de_vehicule` = ? and `vehicle_data`.`Disponibilite` = ? and `vehicle_data`.`Brand` = ?"
-                              }
-                            },
-                            "output": true,
-                            "meta": [
-                              {
-                                "name": "offset",
-                                "type": "number"
-                              },
-                              {
-                                "name": "limit",
-                                "type": "number"
-                              },
-                              {
-                                "name": "total",
-                                "type": "number"
-                              },
-                              {
-                                "name": "page",
-                                "type": "object",
-                                "sub": [
-                                  {
-                                    "name": "offset",
-                                    "type": "object",
-                                    "sub": [
-                                      {
-                                        "name": "first",
-                                        "type": "number"
-                                      },
-                                      {
-                                        "name": "prev",
-                                        "type": "number"
-                                      },
-                                      {
-                                        "name": "next",
-                                        "type": "number"
-                                      },
-                                      {
-                                        "name": "last",
-                                        "type": "number"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "name": "current",
-                                    "type": "number"
-                                  },
-                                  {
-                                    "name": "total",
-                                    "type": "number"
-                                  }
-                                ]
-                              },
-                              {
-                                "name": "data",
-                                "type": "array",
-                                "sub": [
-                                  {
-                                    "type": "number",
-                                    "name": "id"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Brand"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Model"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Prix_de_vente_conseille"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Economie"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Votre_prix"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Premiere_mise_en_circulation"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Kilometrage"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Puissance"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Energie"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Type_de_vehicule"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Carrosserie"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Couleur"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Transmission"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Couleur_exterieure"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Consommation_urbaine_1"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Consommation_extra_urbaine_1"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Classe_d_efficience_energetique"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Emissions_de_CO2_1"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Equipements_principaux"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Equipements"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Numero_interne"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Lieu"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Disponibilite"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Consommation_electr_mixte_1"
-                                  },
-                                  {
-                                    "type": "number",
-                                    "name": "Tarif"
-                                  },
-                                  {
-                                    "type": "datetime",
-                                    "name": "Created"
-                                  },
-                                  {
-                                    "type": "datetime",
-                                    "name": "Modified"
-                                  },
-                                  {
-                                    "type": "text",
-                                    "name": "Vehicle_Image"
-                                  },
-                                  {
-                                    "type": "boolean",
-                                    "name": "Desactive"
-                                  },
-                                  {
-                                    "type": "number",
-                                    "name": "cm3"
-                                  }
-                                ]
-                              }
-                            ],
-                            "outputType": "object",
-                            "disabled": true
-                          }
-                        ]
-                      }
-                    },
-                    "outputType": "boolean"
-                  },
-                  {
-                    "name": "",
-                    "module": "core",
-                    "action": "condition",
-                    "options": {
-                      "if": "{{($_GET.essence||$_GET.diesel||$_GET.electrique)}}",
-                      "then": {
-                        "steps": {
-                          "name": "query",
-                          "module": "dbconnector",
-                          "action": "paged",
-                          "options": {
-                            "connection": "autonetdb",
-                            "sql": {
-                              "type": "select",
-                              "columns": [],
-                              "params": [
-                                {
-                                  "operator": "equal",
-                                  "type": "expression",
-                                  "name": ":P1",
-                                  "value": "{{$_GET.diesel}}",
-                                  "test": ""
-                                },
-                                {
-                                  "operator": "equal",
-                                  "type": "expression",
-                                  "name": ":P2",
-                                  "value": "{{$_GET.essence}}",
-                                  "test": ""
-                                },
-                                {
-                                  "operator": "equal",
-                                  "type": "expression",
-                                  "name": ":P3",
-                                  "value": "{{$_GET.electrique}}",
-                                  "test": ""
-                                }
-                              ],
-                              "table": {
-                                "name": "vehicle_data"
-                              },
-                              "primary": "id",
-                              "joins": [],
-                              "wheres": {
-                                "condition": "AND",
-                                "rules": [
-                                  {
-                                    "id": "vehicle_data.Type_de_vehicule",
-                                    "field": "vehicle_data.Type_de_vehicule",
-                                    "type": "string",
-                                    "operator": "equal",
-                                    "value": "Véhicule 0KM",
-                                    "data": {
-                                      "table": "vehicle_data",
-                                      "column": "Type_de_vehicule",
-                                      "type": "text",
-                                      "columnObj": {
-                                        "type": "string",
-                                        "maxLength": 255,
-                                        "primary": false,
-                                        "nullable": true,
-                                        "name": "Type_de_vehicule"
-                                      }
-                                    },
-                                    "operation": "="
-                                  },
-                                  {
-                                    "id": "vehicle_data.Disponibilite",
-                                    "field": "vehicle_data.Disponibilite",
-                                    "type": "string",
-                                    "operator": "equal",
-                                    "value": "immédiatement",
-                                    "data": {
-                                      "table": "vehicle_data",
-                                      "column": "Disponibilite",
-                                      "type": "text",
-                                      "columnObj": {
-                                        "type": "string",
-                                        "maxLength": 255,
-                                        "primary": false,
-                                        "nullable": true,
-                                        "name": "Disponibilite"
-                                      }
-                                    },
-                                    "operation": "="
-                                  },
-                                  {
-                                    "condition": "OR",
-                                    "rules": [
-                                      {
-                                        "id": "vehicle_data.Energie",
-                                        "field": "vehicle_data.Energie",
-                                        "type": "string",
-                                        "operator": "equal",
-                                        "value": "{{$_GET.diesel}}",
-                                        "data": {
-                                          "table": "vehicle_data",
-                                          "column": "Energie",
-                                          "type": "text",
-                                          "columnObj": {
-                                            "type": "string",
-                                            "maxLength": 255,
-                                            "primary": false,
-                                            "nullable": true,
-                                            "name": "Energie"
-                                          }
-                                        },
-                                        "operation": "="
-                                      },
-                                      {
-                                        "id": "vehicle_data.Energie",
-                                        "field": "vehicle_data.Energie",
-                                        "type": "string",
-                                        "operator": "equal",
-                                        "value": "{{$_GET.essence}}",
-                                        "data": {
-                                          "table": "vehicle_data",
-                                          "column": "Energie",
-                                          "type": "text",
-                                          "columnObj": {
-                                            "type": "string",
-                                            "maxLength": 255,
-                                            "primary": false,
-                                            "nullable": true,
-                                            "name": "Energie"
-                                          }
-                                        },
-                                        "operation": "="
-                                      },
-                                      {
-                                        "id": "vehicle_data.Energie",
-                                        "field": "vehicle_data.Energie",
-                                        "type": "string",
-                                        "operator": "equal",
-                                        "value": "{{$_GET.electrique}}",
-                                        "data": {
-                                          "table": "vehicle_data",
-                                          "column": "Energie",
-                                          "type": "text",
-                                          "columnObj": {
-                                            "type": "string",
-                                            "maxLength": 255,
-                                            "primary": false,
-                                            "nullable": true,
-                                            "name": "Energie"
-                                          }
-                                        },
-                                        "operation": "="
-                                      }
-                                    ],
-                                    "conditional": null
-                                  }
-                                ],
-                                "conditional": null,
-                                "valid": true
-                              },
-                              "query": "select * from `vehicle_data` where `vehicle_data`.`Type_de_vehicule` = ? and `vehicle_data`.`Disponibilite` = ? and (`vehicle_data`.`Energie` = ? or `vehicle_data`.`Energie` = ? or `vehicle_data`.`Energie` = ?)"
-                            }
-                          },
-                          "output": true,
-                          "meta": [
-                            {
-                              "name": "offset",
-                              "type": "number"
-                            },
-                            {
-                              "name": "limit",
-                              "type": "number"
-                            },
-                            {
-                              "name": "total",
-                              "type": "number"
-                            },
-                            {
-                              "name": "page",
-                              "type": "object",
-                              "sub": [
-                                {
-                                  "name": "offset",
-                                  "type": "object",
-                                  "sub": [
-                                    {
-                                      "name": "first",
-                                      "type": "number"
-                                    },
-                                    {
-                                      "name": "prev",
-                                      "type": "number"
-                                    },
-                                    {
-                                      "name": "next",
-                                      "type": "number"
-                                    },
-                                    {
-                                      "name": "last",
-                                      "type": "number"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "current",
-                                  "type": "number"
-                                },
-                                {
-                                  "name": "total",
-                                  "type": "number"
-                                }
-                              ]
-                            },
-                            {
-                              "name": "data",
-                              "type": "array",
-                              "sub": [
-                                {
-                                  "type": "number",
-                                  "name": "id"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Brand"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Model"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Prix_de_vente_conseille"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Economie"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Votre_prix"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Premiere_mise_en_circulation"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Kilometrage"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Puissance"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Energie"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Type_de_vehicule"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Carrosserie"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Couleur"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Transmission"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Couleur_exterieure"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Consommation_urbaine_1"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Consommation_extra_urbaine_1"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Classe_d_efficience_energetique"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Emissions_de_CO2_1"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Equipements_principaux"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Equipements"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Numero_interne"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Lieu"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Disponibilite"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Consommation_electr_mixte_1"
-                                },
-                                {
-                                  "type": "number",
-                                  "name": "Tarif"
-                                },
-                                {
-                                  "type": "datetime",
-                                  "name": "Created"
-                                },
-                                {
-                                  "type": "datetime",
-                                  "name": "Modified"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Vehicle_Image"
-                                },
-                                {
-                                  "type": "boolean",
-                                  "name": "Desactive"
-                                },
-                                {
-                                  "type": "number",
-                                  "name": "cm3"
-                                }
-                              ]
-                            }
-                          ],
-                          "outputType": "object"
+                "steps": {
+                  "name": "customVehicle",
+                  "module": "dbupdater",
+                  "action": "custom",
+                  "options": {
+                    "connection": "autonetDB",
+                    "sql": {
+                      "query": "SELECT vd.id AS 'VehicleID',vd.Brand, vd.Model, vd.Tarif,  vd.Lieu,  vd.cm3, vd.Puissance, vd.Energie, vd.Type_de_vehicule, vd.Transmission, vd.Carrosserie, vd.Couleur,ti.territoire, vd.Kilometrage, vd.Premiere_mise_en_circulation, vd.Emissions_de_CO2_1, vd.Energie, vd.Vehicle_Image,\nMIN(ROUND(((vd.Tarif + si.price + se.price) + (vd.Tarif + si.price + se.price) * (ti.OM + ti.OMR + ti.TVA) / 100) * 1.15, 0)) AS 'LowestPrice'\nFROM vehicle_data vd\nJOIN Shipping_int si ON vd.Lieu = si.`from`\nJOIN Shipping_ext se ON si.`to` = se.`from`\nJOIN tax_import ti ON vd.cm3 BETWEEN ti.cy_min AND ti.cy_max\nWHERE ti.territoire = 'PTP' AND vd.Disponibilite='immédiatement'\nAND (vd.Brand=@brand OR @brand='') AND (vd.Type_de_vehicule=@Type_de_vehicule OR @Type_de_vehicule='') AND (vd.Carrosserie=@Carrosserie OR @Carrosserie='') AND (REPLACE(vd.Kilometrage, ' km', '')<=REPLACE(@killomiterage, ' Km', '') OR @killomiterage='') AND (vd.Transmission=@automatique OR @automatique='' OR vd.Transmission=@manuel) AND (vd.Transmission=@manuel OR @manuel='' OR vd.Transmission=@automatique) AND (vd.Energie=@electric OR @electric='' OR vd.Energie=@diesel OR vd.Energie=@essence) AND (vd.Energie=@diesel OR @diesel='' OR vd.Energie=@essence OR vd.Energie=@electric) AND (vd.Energie=@essence OR @essence='' OR vd.Energie=@diesel OR vd.Energie=@electric)\nGROUP BY vd.id;",
+                      "params": [
+                        {
+                          "name": "@brand",
+                          "value": "{{$_GET.brand}}",
+                          "test": "Opel"
+                        },
+                        {
+                          "name": "@Type_de_vehicule",
+                          "value": "{{$_GET.type_de_vehicule}}",
+                          "test": "Véhicule 0KM"
+                        },
+                        {
+                          "name": "@Carrosserie",
+                          "value": "{{$_GET.carrosserie}}",
+                          "test": "Berline"
+                        },
+                        {
+                          "name": "@killomiterage",
+                          "value": "{{$_GET.killomiterage}}",
+                          "test": "500 Km"
+                        },
+                        {
+                          "name": "@automatique",
+                          "value": "{{$_GET.automatique}}",
+                          "test": ""
+                        },
+                        {
+                          "name": "@manuel",
+                          "value": "{{$_GET.manuel}}",
+                          "test": "Manuel"
+                        },
+                        {
+                          "name": "@electric",
+                          "value": "{{$_GET.electrique}}"
+                        },
+                        {
+                          "name": "@diesel",
+                          "value": "{{$_GET.diesel}}"
+                        },
+                        {
+                          "name": "@essence",
+                          "value": "{{$_GET.essence}}"
                         }
-                      }
-                    },
-                    "outputType": "boolean"
+                      ]
+                    }
                   },
-                  {
-                    "name": "",
-                    "module": "core",
-                    "action": "condition",
-                    "options": {
-                      "if": "{{($_GET.brand&&($_GET.diesel||$_GET.essence||$_GET.electrique))}}",
-                      "then": {
-                        "steps": {
-                          "name": "query",
-                          "module": "dbconnector",
-                          "action": "paged",
-                          "options": {
-                            "connection": "autonetDB",
-                            "sql": {
-                              "type": "select",
-                              "columns": [],
-                              "params": [
-                                {
-                                  "operator": "equal",
-                                  "type": "expression",
-                                  "name": ":P1",
-                                  "value": "{{$_GET.diesel}}",
-                                  "test": ""
-                                },
-                                {
-                                  "operator": "equal",
-                                  "type": "expression",
-                                  "name": ":P2",
-                                  "value": "{{$_GET.essence}}",
-                                  "test": ""
-                                },
-                                {
-                                  "operator": "equal",
-                                  "type": "expression",
-                                  "name": ":P3",
-                                  "value": "{{$_GET.electrique}}",
-                                  "test": ""
-                                },
-                                {
-                                  "operator": "equal",
-                                  "type": "expression",
-                                  "name": ":P4",
-                                  "value": "{{$_GET.brand}}",
-                                  "test": ""
-                                }
-                              ],
-                              "table": {
-                                "name": "vehicle_data"
-                              },
-                              "primary": "id",
-                              "joins": [],
-                              "wheres": {
-                                "condition": "AND",
-                                "rules": [
-                                  {
-                                    "id": "vehicle_data.Type_de_vehicule",
-                                    "field": "vehicle_data.Type_de_vehicule",
-                                    "type": "string",
-                                    "operator": "equal",
-                                    "value": "Véhicule 0KM",
-                                    "data": {
-                                      "table": "vehicle_data",
-                                      "column": "Type_de_vehicule",
-                                      "type": "text",
-                                      "columnObj": {
-                                        "type": "string",
-                                        "maxLength": 255,
-                                        "primary": false,
-                                        "nullable": true,
-                                        "name": "Type_de_vehicule"
-                                      }
-                                    },
-                                    "operation": "="
-                                  },
-                                  {
-                                    "id": "vehicle_data.Disponibilite",
-                                    "field": "vehicle_data.Disponibilite",
-                                    "type": "string",
-                                    "operator": "equal",
-                                    "value": "immédiatement",
-                                    "data": {
-                                      "table": "vehicle_data",
-                                      "column": "Disponibilite",
-                                      "type": "text",
-                                      "columnObj": {
-                                        "type": "string",
-                                        "maxLength": 255,
-                                        "primary": false,
-                                        "nullable": true,
-                                        "name": "Disponibilite"
-                                      }
-                                    },
-                                    "operation": "="
-                                  },
-                                  {
-                                    "condition": "OR",
-                                    "rules": [
-                                      {
-                                        "id": "vehicle_data.Energie",
-                                        "field": "vehicle_data.Energie",
-                                        "type": "string",
-                                        "operator": "equal",
-                                        "value": "{{$_GET.diesel}}",
-                                        "data": {
-                                          "table": "vehicle_data",
-                                          "column": "Energie",
-                                          "type": "text",
-                                          "columnObj": {
-                                            "type": "string",
-                                            "maxLength": 255,
-                                            "primary": false,
-                                            "nullable": true,
-                                            "name": "Energie"
-                                          }
-                                        },
-                                        "operation": "="
-                                      },
-                                      {
-                                        "id": "vehicle_data.Energie",
-                                        "field": "vehicle_data.Energie",
-                                        "type": "string",
-                                        "operator": "equal",
-                                        "value": "{{$_GET.essence}}",
-                                        "data": {
-                                          "table": "vehicle_data",
-                                          "column": "Energie",
-                                          "type": "text",
-                                          "columnObj": {
-                                            "type": "string",
-                                            "maxLength": 255,
-                                            "primary": false,
-                                            "nullable": true,
-                                            "name": "Energie"
-                                          }
-                                        },
-                                        "operation": "="
-                                      },
-                                      {
-                                        "id": "vehicle_data.Energie",
-                                        "field": "vehicle_data.Energie",
-                                        "type": "string",
-                                        "operator": "equal",
-                                        "value": "{{$_GET.electrique}}",
-                                        "data": {
-                                          "table": "vehicle_data",
-                                          "column": "Energie",
-                                          "type": "text",
-                                          "columnObj": {
-                                            "type": "string",
-                                            "maxLength": 255,
-                                            "primary": false,
-                                            "nullable": true,
-                                            "name": "Energie"
-                                          }
-                                        },
-                                        "operation": "="
-                                      }
-                                    ],
-                                    "conditional": null
-                                  },
-                                  {
-                                    "id": "vehicle_data.Brand",
-                                    "field": "vehicle_data.Brand",
-                                    "type": "string",
-                                    "operator": "equal",
-                                    "value": "{{$_GET.brand}}",
-                                    "data": {
-                                      "table": "vehicle_data",
-                                      "column": "Brand",
-                                      "type": "text",
-                                      "columnObj": {
-                                        "type": "string",
-                                        "maxLength": 255,
-                                        "primary": false,
-                                        "nullable": true,
-                                        "name": "Brand"
-                                      }
-                                    },
-                                    "operation": "="
-                                  }
-                                ],
-                                "conditional": null,
-                                "valid": true
-                              },
-                              "query": "select * from `vehicle_data` where `vehicle_data`.`Type_de_vehicule` = ? and `vehicle_data`.`Disponibilite` = ? and (`vehicle_data`.`Energie` = ? or `vehicle_data`.`Energie` = ? or `vehicle_data`.`Energie` = ?) and `vehicle_data`.`Brand` = ?"
-                            }
-                          },
-                          "output": true,
-                          "meta": [
-                            {
-                              "name": "offset",
-                              "type": "number"
-                            },
-                            {
-                              "name": "limit",
-                              "type": "number"
-                            },
-                            {
-                              "name": "total",
-                              "type": "number"
-                            },
-                            {
-                              "name": "page",
-                              "type": "object",
-                              "sub": [
-                                {
-                                  "name": "offset",
-                                  "type": "object",
-                                  "sub": [
-                                    {
-                                      "name": "first",
-                                      "type": "number"
-                                    },
-                                    {
-                                      "name": "prev",
-                                      "type": "number"
-                                    },
-                                    {
-                                      "name": "next",
-                                      "type": "number"
-                                    },
-                                    {
-                                      "name": "last",
-                                      "type": "number"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "current",
-                                  "type": "number"
-                                },
-                                {
-                                  "name": "total",
-                                  "type": "number"
-                                }
-                              ]
-                            },
-                            {
-                              "name": "data",
-                              "type": "array",
-                              "sub": [
-                                {
-                                  "type": "number",
-                                  "name": "id"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Brand"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Model"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Prix_de_vente_conseille"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Economie"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Votre_prix"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Premiere_mise_en_circulation"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Kilometrage"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Puissance"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Energie"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Type_de_vehicule"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Carrosserie"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Couleur"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Transmission"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Couleur_exterieure"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Consommation_urbaine_1"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Consommation_extra_urbaine_1"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Classe_d_efficience_energetique"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Emissions_de_CO2_1"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Equipements_principaux"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Equipements"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Numero_interne"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Lieu"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Disponibilite"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Consommation_electr_mixte_1"
-                                },
-                                {
-                                  "type": "number",
-                                  "name": "Tarif"
-                                },
-                                {
-                                  "type": "datetime",
-                                  "name": "Created"
-                                },
-                                {
-                                  "type": "datetime",
-                                  "name": "Modified"
-                                },
-                                {
-                                  "type": "text",
-                                  "name": "Vehicle_Image"
-                                },
-                                {
-                                  "type": "boolean",
-                                  "name": "Desactive"
-                                },
-                                {
-                                  "type": "number",
-                                  "name": "cm3"
-                                }
-                              ]
-                            }
-                          ],
-                          "outputType": "object"
-                        }
-                      }
+                  "output": true,
+                  "meta": [
+                    {
+                      "name": "VehicleID",
+                      "type": "number"
                     },
-                    "outputType": "boolean"
-                  }
-                ]
+                    {
+                      "name": "Brand",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Model",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Tarif",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Lieu",
+                      "type": "text"
+                    },
+                    {
+                      "name": "cm3",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Puissance",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Energie",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Type_de_vehicule",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Transmission",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Carrosserie",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Couleur",
+                      "type": "text"
+                    },
+                    {
+                      "name": "territoire",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Kilometrage",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Premiere_mise_en_circulation",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Emissions_de_CO2_1",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Vehicle_Image",
+                      "type": "text"
+                    },
+                    {
+                      "name": "LowestPrice",
+                      "type": "number"
+                    }
+                  ],
+                  "outputType": "array"
+                }
               },
               "else": {
-                "steps": [
-                  {
-                    "name": "query",
-                    "module": "dbconnector",
-                    "action": "paged",
-                    "options": {
-                      "connection": "autonetdb",
-                      "sql": {
-                        "type": "select",
-                        "columns": [],
-                        "params": [],
-                        "table": {
-                          "name": "vehicle_data"
-                        },
-                        "primary": "id",
-                        "joins": [],
-                        "wheres": {
-                          "condition": "AND",
-                          "rules": [
-                            {
-                              "id": "vehicle_data.Type_de_vehicule",
-                              "field": "vehicle_data.Type_de_vehicule",
-                              "type": "string",
-                              "operator": "equal",
-                              "value": "Véhicule 0KM",
-                              "data": {
-                                "table": "vehicle_data",
-                                "column": "Type_de_vehicule",
-                                "type": "text",
-                                "columnObj": {
-                                  "type": "string",
-                                  "maxLength": 255,
-                                  "primary": false,
-                                  "nullable": true,
-                                  "name": "Type_de_vehicule"
-                                }
-                              },
-                              "operation": "="
-                            },
-                            {
-                              "id": "vehicle_data.Disponibilite",
-                              "field": "vehicle_data.Disponibilite",
-                              "type": "string",
-                              "operator": "equal",
-                              "value": "immédiatement",
-                              "data": {
-                                "table": "vehicle_data",
-                                "column": "Disponibilite",
-                                "type": "text",
-                                "columnObj": {
-                                  "type": "string",
-                                  "maxLength": 255,
-                                  "primary": false,
-                                  "nullable": true,
-                                  "name": "Disponibilite"
-                                }
-                              },
-                              "operation": "="
-                            }
-                          ],
-                          "conditional": null,
-                          "valid": true
-                        },
-                        "query": "select * from `vehicle_data` where `vehicle_data`.`Type_de_vehicule` = ? and `vehicle_data`.`Disponibilite` = ?"
-                      }
-                    },
-                    "output": true,
-                    "meta": [
-                      {
-                        "name": "offset",
-                        "type": "number"
-                      },
-                      {
-                        "name": "limit",
-                        "type": "number"
-                      },
-                      {
-                        "name": "total",
-                        "type": "number"
-                      },
-                      {
-                        "name": "page",
-                        "type": "object",
-                        "sub": [
-                          {
-                            "name": "offset",
-                            "type": "object",
-                            "sub": [
-                              {
-                                "name": "first",
-                                "type": "number"
-                              },
-                              {
-                                "name": "prev",
-                                "type": "number"
-                              },
-                              {
-                                "name": "next",
-                                "type": "number"
-                              },
-                              {
-                                "name": "last",
-                                "type": "number"
-                              }
-                            ]
-                          },
-                          {
-                            "name": "current",
-                            "type": "number"
-                          },
-                          {
-                            "name": "total",
-                            "type": "number"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "data",
-                        "type": "array",
-                        "sub": [
-                          {
-                            "type": "number",
-                            "name": "id"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Brand"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Model"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Prix_de_vente_conseille"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Economie"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Votre_prix"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Premiere_mise_en_circulation"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Kilometrage"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Puissance"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Energie"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Type_de_vehicule"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Carrosserie"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Couleur"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Transmission"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Couleur_exterieure"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Consommation_urbaine_1"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Consommation_extra_urbaine_1"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Classe_d_efficience_energetique"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Emissions_de_CO2_1"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Equipements_principaux"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Equipements"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Numero_interne"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Lieu"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Disponibilite"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Consommation_electr_mixte_1"
-                          },
-                          {
-                            "type": "number",
-                            "name": "Tarif"
-                          },
-                          {
-                            "type": "datetime",
-                            "name": "Created"
-                          },
-                          {
-                            "type": "datetime",
-                            "name": "Modified"
-                          },
-                          {
-                            "type": "text",
-                            "name": "Vehicle_Image"
-                          },
-                          {
-                            "type": "boolean",
-                            "name": "Desactive"
-                          },
-                          {
-                            "type": "number",
-                            "name": "cm3"
-                          }
-                        ]
-                      }
-                    ],
-                    "outputType": "object",
-                    "disabled": true
+                "steps": {
+                  "name": "customVehicle",
+                  "module": "dbupdater",
+                  "action": "custom",
+                  "options": {
+                    "connection": "autonetDB",
+                    "sql": {
+                      "query": "SELECT vd.id AS 'VehicleID',vd.Brand, vd.Model, vd.Tarif,  vd.Lieu,  vd.cm3, vd.Puissance, vd.Energie, vd.Type_de_vehicule, vd.Transmission, vd.Carrosserie, vd.Couleur,ti.territoire, vd.Kilometrage, vd.Premiere_mise_en_circulation, vd.Emissions_de_CO2_1, vd.Energie, vd.Vehicle_Image,\nMIN(ROUND(((vd.Tarif + si.price + se.price) + (vd.Tarif + si.price + se.price) * (ti.OM + ti.OMR + ti.TVA) / 100) * 1.15, 0)) AS 'LowestPrice'\nFROM vehicle_data vd\nJOIN Shipping_int si ON vd.Lieu = si.`from`\nJOIN Shipping_ext se ON si.`to` = se.`from`\nJOIN tax_import ti ON vd.cm3 BETWEEN ti.cy_min AND ti.cy_max\nWHERE ti.territoire = 'PTP'\nGROUP BY vd.id;",
+                      "params": []
+                    }
                   },
-                  {
-                    "name": "customVehicle",
-                    "module": "dbupdater",
-                    "action": "custom",
-                    "options": {
-                      "connection": "autonetDB",
-                      "sql": {
-                        "query": "SELECT vd.id AS 'VehicleID',vd.Brand, vd.Model, vd.Tarif,  vd.Lieu,  vd.cm3, vd.Puissance, vd.Energie, vd.Type_de_vehicule, vd.Transmission, vd.Carrosserie, vd.Couleur,ti.territoire, vd.Kilometrage, vd.Premiere_mise_en_circulation, vd.Emissions_de_CO2_1, vd.Energie, vd.Vehicle_Image,\nMIN(ROUND(((vd.Tarif + si.price + se.price) + (vd.Tarif + si.price + se.price) * (ti.OM + ti.OMR + ti.TVA) / 100) * 1.15, 0)) AS 'LowestPrice'\nFROM vehicle_data vd\nJOIN Shipping_int si ON vd.Lieu = si.`from`\nJOIN Shipping_ext se ON si.`to` = se.`from`\nJOIN tax_import ti ON vd.cm3 BETWEEN ti.cy_min AND ti.cy_max\nWHERE ti.territoire = 'PTP'\nGROUP BY vd.id;",
-                        "params": []
-                      }
+                  "output": true,
+                  "meta": [
+                    {
+                      "name": "VehicleID",
+                      "type": "number"
                     },
-                    "output": true,
-                    "meta": [
-                      {
-                        "name": "VehicleID",
-                        "type": "number"
-                      },
-                      {
-                        "name": "Brand",
-                        "type": "text"
-                      },
-                      {
-                        "name": "Model",
-                        "type": "text"
-                      },
-                      {
-                        "name": "Tarif",
-                        "type": "number"
-                      },
-                      {
-                        "name": "Lieu",
-                        "type": "text"
-                      },
-                      {
-                        "name": "cm3",
-                        "type": "number"
-                      },
-                      {
-                        "name": "Puissance",
-                        "type": "text"
-                      },
-                      {
-                        "name": "Energie",
-                        "type": "text"
-                      },
-                      {
-                        "name": "Type_de_vehicule",
-                        "type": "text"
-                      },
-                      {
-                        "name": "Transmission",
-                        "type": "text"
-                      },
-                      {
-                        "name": "Carrosserie",
-                        "type": "text"
-                      },
-                      {
-                        "name": "Couleur",
-                        "type": "text"
-                      },
-                      {
-                        "name": "territoire",
-                        "type": "text"
-                      },
-                      {
-                        "name": "Kilometrage",
-                        "type": "text"
-                      },
-                      {
-                        "name": "Premiere_mise_en_circulation",
-                        "type": "text"
-                      },
-                      {
-                        "name": "Emissions_de_CO2_1",
-                        "type": "text"
-                      },
-                      {
-                        "name": "Energie",
-                        "type": "text"
-                      },
-                      {
-                        "name": "LowestPrice",
-                        "type": "number"
-                      }
-                    ],
-                    "outputType": "array"
-                  }
-                ]
+                    {
+                      "name": "Brand",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Model",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Tarif",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Lieu",
+                      "type": "text"
+                    },
+                    {
+                      "name": "cm3",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Puissance",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Energie",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Type_de_vehicule",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Transmission",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Carrosserie",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Couleur",
+                      "type": "text"
+                    },
+                    {
+                      "name": "territoire",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Kilometrage",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Premiere_mise_en_circulation",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Emissions_de_CO2_1",
+                      "type": "text"
+                    },
+                    {
+                      "name": "Vehicle_Image",
+                      "type": "text"
+                    },
+                    {
+                      "name": "LowestPrice",
+                      "type": "number"
+                    }
+                  ],
+                  "outputType": "array"
+                }
               }
             },
             "outputType": "boolean"
