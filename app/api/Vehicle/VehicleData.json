@@ -36,6 +36,10 @@
       {
         "type": "text",
         "name": "essence"
+      },
+      {
+        "type": "text",
+        "name": "price"
       }
     ]
   },
@@ -51,7 +55,7 @@
             "module": "core",
             "action": "condition",
             "options": {
-              "if": "{{($_GET.brand||$_GET.type_de_vehicule||$_GET.carrosseriece||$_GET.killomiterage||$_GET.automatique||$_GET.manuel||$_GET.electrique||$_GET.diesel||$_GET.essence)}}",
+              "if": "{{($_GET.brand||$_GET.type_de_vehicule||$_GET.carrosseriece||$_GET.killomiterage||$_GET.automatique||$_GET.manuel||$_GET.electrique||$_GET.diesel||$_GET.essence||$_GET.price)}}",
               "then": {
                 "steps": {
                   "name": "customVehicle",
@@ -60,22 +64,22 @@
                   "options": {
                     "connection": "autonetDB",
                     "sql": {
-                      "query": "SELECT vd.id AS 'VehicleID',vd.Brand, vd.Model, vd.Tarif,  vd.Lieu,  vd.cm3, vd.Puissance, vd.Energie, vd.Type_de_vehicule, vd.Transmission, vd.Carrosserie, vd.Couleur,ti.territoire, vd.Kilometrage, vd.Premiere_mise_en_circulation, vd.Emissions_de_CO2_1, vd.Energie, vd.Vehicle_Image,\nMIN(ROUND(((vd.Tarif + si.price + se.price) + (vd.Tarif + si.price + se.price) * (ti.OM + ti.OMR + ti.TVA) / 100) * 1.15, 0)) AS 'LowestPrice'\nFROM vehicle_data vd\nJOIN Shipping_int si ON vd.Lieu = si.`from`\nJOIN Shipping_ext se ON si.`to` = se.`from`\nJOIN tax_import ti ON vd.cm3 BETWEEN ti.cy_min AND ti.cy_max\nWHERE ti.territoire = 'PTP' AND vd.Disponibilite='immédiatement'\nAND (vd.Brand=@brand OR @brand='') AND (vd.Type_de_vehicule=@Type_de_vehicule OR @Type_de_vehicule='') AND (vd.Carrosserie=@Carrosserie OR @Carrosserie='') AND (REPLACE(vd.Kilometrage, ' km', '')<=REPLACE(@killomiterage, ' Km', '') OR @killomiterage='') AND (vd.Transmission=@automatique OR @automatique='' OR vd.Transmission=@manuel) AND (vd.Transmission=@manuel OR @manuel='' OR vd.Transmission=@automatique) AND (vd.Energie=@electric OR @electric='' OR vd.Energie=@diesel OR vd.Energie=@essence) AND (vd.Energie=@diesel OR @diesel='' OR vd.Energie=@essence OR vd.Energie=@electric) AND (vd.Energie=@essence OR @essence='' OR vd.Energie=@diesel OR vd.Energie=@electric)\nGROUP BY vd.id;",
+                      "query": "\nSELECT \n    vd.id AS 'VehicleID',\n    vd.Brand,\n    vd.Model,\n    vd.Lieu,\n    vd.cm3,\n    vd.Puissance,\n    vd.Energie,\n    vd.Type_de_vehicule,\n    vd.Transmission,\n    vd.Carrosserie,\n    vd.Couleur,\n    ti.territoire,\n    vd.Kilometrage,\n    vd.Premiere_mise_en_circulation,\n    vd.Emissions_de_CO2_1,\n    vd.Vehicle_Image,\n    MIN(ROUND(((vd.Tarif + si.price + se.price) + (vd.Tarif + si.price + se.price) * (ti.OM + ti.OMR + ti.TVA) / 100) * 1.15, 0)) AS 'LowestPrice'\nFROM vehicle_data vd\nJOIN Shipping_int si ON vd.Lieu = si.`from`\nJOIN Shipping_ext se ON si.`to` = se.`from`\nJOIN tax_import ti ON vd.cm3 BETWEEN ti.cy_min AND ti.cy_max\nWHERE ti.territoire = 'PTP' AND vd.Disponibilite = 'immédiatement' \nAND (vd.Brand=@brand OR @brand='') \nAND (vd.Type_de_vehicule=@Type_de_vehicule OR @Type_de_vehicule='') \nAND (vd.Carrosserie=@Carrosserie OR @Carrosserie='')\nAND (vd.Transmission=@automatique OR @automatique='' OR vd.Transmission=@manuel) \nAND (vd.Transmission=@manuel OR @manuel='' OR vd.Transmission=@automatique) \nAND (vd.Energie=@electric OR @electric='' OR vd.Energie=@diesel OR vd.Energie=@essence) \nAND (vd.Energie=@diesel OR @diesel='' OR vd.Energie=@essence OR vd.Energie=@electric) \nAND (vd.Energie=@essence OR @essence='' OR vd.Energie=@diesel OR vd.Energie=@electric) \nAND (REPLACE(REPLACE(vd.Kilometrage, ' ', ''), ' km', '') <= REPLACE(@killomiterage, ' Km', '') OR @killomiterage = '') \nGROUP BY vd.id\nHAVING MIN(ROUND(((vd.Tarif + si.price + se.price) + (vd.Tarif + si.price + se.price) * (ti.OM + ti.OMR + ti.TVA) / 100) * 1.15, 0)) < CAST(REPLACE(@price, '€ ', '') AS DECIMAL);",
                       "params": [
                         {
                           "name": "@brand",
                           "value": "{{$_GET.brand}}",
-                          "test": "Opel"
+                          "test": ""
                         },
                         {
                           "name": "@Type_de_vehicule",
                           "value": "{{$_GET.type_de_vehicule}}",
-                          "test": "Véhicule 0KM"
+                          "test": ""
                         },
                         {
                           "name": "@Carrosserie",
                           "value": "{{$_GET.carrosserie}}",
-                          "test": "Berline"
+                          "test": ""
                         },
                         {
                           "name": "@killomiterage",
@@ -90,7 +94,7 @@
                         {
                           "name": "@manuel",
                           "value": "{{$_GET.manuel}}",
-                          "test": "Manuel"
+                          "test": ""
                         },
                         {
                           "name": "@electric",
@@ -103,6 +107,10 @@
                         {
                           "name": "@essence",
                           "value": "{{$_GET.essence}}"
+                        },
+                        {
+                          "name": "@price",
+                          "value": "{{$_GET.price}}"
                         }
                       ]
                     }

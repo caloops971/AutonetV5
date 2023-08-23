@@ -8,7 +8,7 @@
 <dmx-serverconnect id="scVehicleBodyType" url="/api/Vehicle/VehicleType"></dmx-serverconnect>
 <script is="dmx-flow" id="flowChecked" type="text/dmx-flow">{
   run: {
-    action: "{{scVehicleData.load({brand: content.formFilter.selectBrands.value, type_de_vehicule: content.formFilter.VehicleCondition.value, carrosserie: content.formFilter.selectBodyType.value, killomiterage: content.formFilter.killomiterage.value, automatique: (content.formFilter.Automatique.checked?content.formFilter.Automatique.value:''), manuel: (content.formFilter.Manuel.checked?content.formFilter.Manuel.value:''), electrique: (content.formFilter.Electrique.checked?content.formFilter.Electrique.value:''), diesel: (content.formFilter.Diesel.checked?content.formFilter.Diesel.value:''), essence: (content.formFilter.Essence.checked?content.formFilter.Essence.value:'')})}}"
+    action: "{{scVehicleData.load({brand: content.formFilter.selectBrands.value, type_de_vehicule: content.formFilter.VehicleCondition.value, carrosserie: content.formFilter.selectBodyType.value, killomiterage: content.formFilter.killomiterage.value, automatique: (content.formFilter.Automatique.checked?content.formFilter.Automatique.value:''), manuel: (content.formFilter.Manuel.checked?content.formFilter.Manuel.value:''), electrique: (content.formFilter.Electrique.checked?content.formFilter.Electrique.value:''), diesel: (content.formFilter.Diesel.checked?content.formFilter.Diesel.value:''), essence: (content.formFilter.Essence.checked?content.formFilter.Essence.value:''), price: content.formFilter.Price.value})}}"
   }
 }</script>
 <div class="section-padding listing-with-map listing-with-map-2 style-2-map-2">
@@ -43,13 +43,13 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="search-distance-value">Radius:
-                                        <input type="text" id="killomiterage" class="range-slider-value distance-value" dmx-on:changed="flowChecked.run()" readonly>
+                                        <input type="text" id="killomiterage" class="range-slider-value distance-value" readonly dmx-on:updated="flowChecked.run()">
                                     </div>
                                     <div id="search_distance"></div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="search-search-price">Prix: € 0 - 100000
-                                        <input type="text" id="Price" class="range-slider-value price-value" readonly>
+                                    <div class="search-search-price">Prix: € 1 - 100000
+                                        <input type="text" id="Price" class="range-slider-value price-value float-left" readonly dmx-on:updated="flowChecked.run()">
                                     </div>
                                     <div id="search_price"></div>
                                 </div>

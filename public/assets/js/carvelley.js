@@ -815,14 +815,14 @@
     $(function () {
         $("#search_price").slider({
             range: "min",
-            value: 50,
+            value: 90000,
             min: 1,
-            max: 1000,
+            max: 100000,
             slide: function (event, ui) {
-                $(".price-value").val("$ " + ui.value);
+                $(".price-value").val("€ " + ui.value);
             }
         });
-        $(".price-value").val("$ " + $("#search_price").slider("value"));
+        $(".price-value").val("€ " + $("#search_price").slider("value"));
     });
     // faqs collaps
     $(document).ready(function () {

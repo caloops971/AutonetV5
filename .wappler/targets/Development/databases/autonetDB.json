@@ -17,8 +17,7 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci",
-          "system_versioned": false
+          "collation": "utf8mb4_0900_ai_ci"
         },
         "columns": {
           "id": {
@@ -50,8 +49,7 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci",
-          "system_versioned": false
+          "collation": "utf8mb4_0900_ai_ci"
         },
         "columns": {
           "id": {
@@ -91,8 +89,7 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci",
-          "system_versioned": false
+          "collation": "utf8mb4_0900_ai_ci"
         },
         "columns": {
           "id": {
@@ -124,8 +121,7 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci",
-          "system_versioned": false
+          "collation": "utf8mb4_0900_ai_ci"
         },
         "columns": {
           "id": {
@@ -172,8 +168,7 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci",
-          "system_versioned": false
+          "collation": "utf8mb4_0900_ai_ci"
         },
         "columns": {
           "id": {
@@ -236,8 +231,7 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci",
-          "system_versioned": false
+          "collation": "utf8mb4_0900_ai_ci"
         },
         "columns": {
           "id": {
@@ -314,8 +308,7 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci",
-          "system_versioned": false
+          "collation": "utf8mb4_0900_ai_ci"
         },
         "columns": {
           "id": {
@@ -382,8 +375,7 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci",
-          "system_versioned": false
+          "collation": "utf8mb4_0900_ai_ci"
         },
         "columns": {
           "id": {
@@ -626,6 +618,37 @@
           "cm3": {
             "db": {
               "type": "integer",
+              "primary": false,
+              "nullable": true
+            }
+          }
+        }
+      },
+      "vehicle_img": {
+        "db": {
+          "engine": "InnoDB",
+          "schema": "defaultdb",
+          "collation": "utf8mb4_0900_ai_ci"
+        },
+        "columns": {
+          "id": {
+            "db": {
+              "type": "increments",
+              "primary": true,
+              "nullable": false
+            }
+          },
+          "vehicle_id": {
+            "db": {
+              "type": "integer",
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "img": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
               "primary": false,
               "nullable": true
             }
