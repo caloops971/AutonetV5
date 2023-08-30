@@ -1,0 +1,236 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/vehicle-details.ejs",
+      "linkedForm": "scformInquiry"
+    },
+    "$_POST": [
+      {
+        "type": "text",
+        "fieldName": "vehicle_id",
+        "name": "vehicle_id"
+      },
+      {
+        "type": "text",
+        "fieldName": "vehicle_name",
+        "name": "vehicle_name"
+      },
+      {
+        "type": "text",
+        "fieldName": "email_id",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            },
+            "core:email": {
+              "param": ""
+            }
+          }
+        },
+        "name": "email_id"
+      },
+      {
+        "type": "number",
+        "fieldName": "WhatsAppNo",
+        "options": {
+          "rules": {}
+        },
+        "name": "WhatsAppNo"
+      },
+      {
+        "type": "text",
+        "fieldName": "message",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            },
+            "core:minlength": {
+              "param": "20"
+            }
+          }
+        },
+        "name": "message"
+      },
+      {
+        "type": "text",
+        "name": "ip_address"
+      }
+    ],
+    "$_SERVER": [
+      {
+        "type": "text",
+        "name": "REMOTE_ADDR"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "",
+      "module": "core",
+      "action": "trycatch",
+      "options": {
+        "try": {
+          "steps": {
+            "name": "",
+            "module": "core",
+            "action": "condition",
+            "options": {
+              "if": "{{($_POST.email_id&&$_POST.message)}}",
+              "then": {
+                "steps": {
+                  "name": "insertInquiry",
+                  "module": "dbupdater",
+                  "action": "insert",
+                  "options": {
+                    "connection": "autonetDB",
+                    "sql": {
+                      "type": "insert",
+                      "values": [
+                        {
+                          "table": "inquiry",
+                          "column": "vehicle_id",
+                          "type": "number",
+                          "value": "{{$_POST.vehicle_id}}"
+                        },
+                        {
+                          "table": "inquiry",
+                          "column": "vehicle_name",
+                          "type": "text",
+                          "value": "{{$_POST.vehicle_name}}"
+                        },
+                        {
+                          "table": "inquiry",
+                          "column": "email_id",
+                          "type": "text",
+                          "value": "{{$_POST.email_id}}"
+                        },
+                        {
+                          "table": "inquiry",
+                          "column": "whatsapp_no",
+                          "type": "text",
+                          "value": "{{$_POST.WhatsAppNo}}"
+                        },
+                        {
+                          "table": "inquiry",
+                          "column": "message",
+                          "type": "text",
+                          "value": "{{$_POST.message}}"
+                        },
+                        {
+                          "table": "inquiry",
+                          "column": "status",
+                          "type": "text",
+                          "value": "{{'Sent'}}"
+                        },
+                        {
+                          "table": "inquiry",
+                          "column": "created_on",
+                          "type": "datetime",
+                          "value": "{{NOW_UTC}}"
+                        },
+                        {
+                          "table": "inquiry",
+                          "column": "ip_address",
+                          "type": "text",
+                          "value": "{{$_SERVER.REMOTE_ADDR}}"
+                        }
+                      ],
+                      "table": "inquiry",
+                      "returning": "id",
+                      "query": "insert into `inquiry` (`created_on`, `email_id`, `ip_address`, `message`, `status`, `vehicle_id`, `vehicle_name`, `whatsapp_no`) values (?, ?, ?, ?, ?, ?, ?, ?)",
+                      "params": [
+                        {
+                          "name": ":P1",
+                          "type": "expression",
+                          "value": "{{$_POST.vehicle_id}}",
+                          "test": ""
+                        },
+                        {
+                          "name": ":P2",
+                          "type": "expression",
+                          "value": "{{$_POST.vehicle_name}}",
+                          "test": ""
+                        },
+                        {
+                          "name": ":P3",
+                          "type": "expression",
+                          "value": "{{$_POST.email_id}}",
+                          "test": ""
+                        },
+                        {
+                          "name": ":P4",
+                          "type": "expression",
+                          "value": "{{$_POST.WhatsAppNo}}",
+                          "test": ""
+                        },
+                        {
+                          "name": ":P5",
+                          "type": "expression",
+                          "value": "{{$_POST.message}}",
+                          "test": ""
+                        },
+                        {
+                          "name": ":P6",
+                          "type": "expression",
+                          "value": "{{'Sent'}}",
+                          "test": ""
+                        },
+                        {
+                          "name": ":P7",
+                          "type": "expression",
+                          "value": "{{NOW_UTC}}",
+                          "test": ""
+                        },
+                        {
+                          "name": ":P8",
+                          "type": "expression",
+                          "value": "{{$_SERVER.REMOTE_ADDR}}",
+                          "test": ""
+                        }
+                      ]
+                    }
+                  },
+                  "meta": [
+                    {
+                      "name": "identity",
+                      "type": "text"
+                    },
+                    {
+                      "name": "affected",
+                      "type": "number"
+                    }
+                  ]
+                }
+              },
+              "else": {
+                "steps": {
+                  "name": "resp",
+                  "module": "core",
+                  "action": "response",
+                  "options": {
+                    "status": 401,
+                    "data": "Email et Meassage obligatoire"
+                  }
+                }
+              }
+            },
+            "outputType": "boolean"
+          }
+        },
+        "catch": {
+          "steps": {
+            "name": "resp",
+            "module": "core",
+            "action": "response",
+            "options": {
+              "status": 401,
+              "data": "Une erreure est survenue"
+            }
+          }
+        }
+      }
+    }
+  }
+}

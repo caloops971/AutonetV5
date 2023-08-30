@@ -1,4 +1,5 @@
-<!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="vehiclelisting" appConnect="local" components="{dmxBootstrap5Navigation:{},dmxDataTraversal:{},dmxFormatter:{}}" -->
+<!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="vehiclelisting" appConnect="local" components="{dmxBootstrap5Navigation:{},dmxDataTraversal:{},dmxFormatter:{},dmxPreloader:{}}" -->
+<dmx-value id="var1" dmx-bind:value="formFilter.Price.value"></dmx-value>
 <meta name="ac:route" content="/vehicle-listing">
 <!-- listing -->
 <dmx-serverconnect id="scVehicleData" url="/api/Vehicle/VehicleData"></dmx-serverconnect>
@@ -11,6 +12,7 @@
     action: "{{scVehicleData.load({brand: content.formFilter.selectBrands.value, type_de_vehicule: content.formFilter.VehicleCondition.value, carrosserie: content.formFilter.selectBodyType.value, killomiterage: content.formFilter.killomiterage.value, automatique: (content.formFilter.Automatique.checked?content.formFilter.Automatique.value:''), manuel: (content.formFilter.Manuel.checked?content.formFilter.Manuel.value:''), electrique: (content.formFilter.Electrique.checked?content.formFilter.Electrique.value:''), diesel: (content.formFilter.Diesel.checked?content.formFilter.Diesel.value:''), essence: (content.formFilter.Essence.checked?content.formFilter.Essence.value:''), price: content.formFilter.Price.value})}}"
   }
 }</script>
+
 <div class="section-padding listing-with-map listing-with-map-2 style-2-map-2">
     <div class="container-fluid">
         <div class="row">
@@ -41,30 +43,16 @@
                                         <option value="">Filter By Type</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <div class="search-distance-value">Radius:
-                                        <input type="text" id="killomiterage" class="range-slider-value distance-value" readonly dmx-on:updated="flowChecked.run()">
-                                    </div>
-                                    <div id="search_distance"></div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="search-search-price">Prix: € 1 - 100000
-                                        <input type="text" id="Price" class="range-slider-value price-value float-left" readonly dmx-on:updated="flowChecked.run()">
-                                    </div>
-                                    <div id="search_price"></div>
-                                </div>
                                 <div class="form-group"> <strong>Filter By Transmission</strong>
                                     <div class="tags-form-group">
                                         <div class="form-group">
                                             <label class="custom-checkbox">
                                                 <input type="checkbox" id="Automatique" value="Automatique" dmx-on:changed="flowChecked.run()"> <span class="checkmark"></span> Automatique</label>
-                                            <!-- <input type="hidden" name="Automatique" id="Auto" dmx-bind:value="Automatique.checked?Automatique.value:''" dmx-bind:disabled="!Automatique.checked"> -->
                                         </div>
                                         <div class="form-group">
                                             <label class="custom-checkbox">
                                                 <input type="checkbox" id="Manuel" value="Manuel" dmx-on:changed="flowChecked.run()">
                                                 <span class="checkmark"></span> Manuel</label>
-                                            <!-- <input type="hidden" name="Manuel" id="Manual" dmx-bind:value="Manuel.checked?Manuel.value:''" dmx-bind:disabled="!Manuel.checked"> -->
                                         </div>
 
                                     </div>
@@ -74,22 +62,32 @@
                                         <div class="form-group">
                                             <label class="custom-checkbox">
                                                 <input type="checkbox" id="Electrique" value="Electrique" dmx-on:changed="flowChecked.run()"> <span class="checkmark"></span> Electrique</label>
-                                            <!-- <input type="hidden" name="Electrique" id="Elect" dmx-bind:value="Electrique.checked?Electrique.value:''" dmx-bind:disabled="!Electrique.checked"> -->
                                         </div>
                                         <div class="form-group">
                                             <label class="custom-checkbox">
                                                 <input type="checkbox" id="Diesel" value="Diesel" dmx-on:changed="flowChecked.run()"> <span class="checkmark"></span> Diesel</label>
-                                            <!-- <input type="hidden" name="Diesel" id="Dies" dmx-bind:value="Diesel.checked?Diesel.value:''" dmx-bind:disabled="!Diesel.checked"> -->
                                         </div>
                                         <div class="form-group">
                                             <label class="custom-checkbox">
                                                 <input type="checkbox" id="Essence" value="Essence" dmx-on:changed="flowChecked.run()"> <span class="checkmark"></span> Essence</label>
-                                            <!-- <input type="hidden" name="Essence" id="Ess" dmx-bind:value="Essence.checked?Essence.value:''" dmx-bind:disabled="!Essence.checked"> -->
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-submit text-center d-none">
-                                    <button type="submit" class="btn-second orange-btn">APPLY FILTER</button>
+                                <div class="form-group">
+                                    <div class="search-distance-value">Radius:
+                                        <input type="text" id="killomiterage" class="range-slider-value distance-value" readonly>
+                                    </div>
+                                    <div id="search_distance"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="search-search-price">Prix: € 1 - 100000
+                                        <input type="text" id="Price" class="range-slider-value price-value float-left" readonly>
+                                        <!---->
+                                    </div>
+                                    <div id="search_price"></div>
+                                </div>
+                                <div class="form-submit text-center">
+                                    <button class="btn-second orange-btn" dmx-on:click="flowChecked.run()" dmx-class:disabled="scVehicleData.state.executing" dmx-style:cursor="(scVehicleData.state.executing?'not-allowed':'pointer')">APPLY FILTER</button>
                                 </div>
                             </form>
                         </div>

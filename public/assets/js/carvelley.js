@@ -816,7 +816,7 @@
         $("#search_price").slider({
             range: "min",
             value: 90000,
-            min: 1,
+            min: 5000,
             max: 100000,
             slide: function (event, ui) {
                 $(".price-value").val("€ " + ui.value);
@@ -953,6 +953,7 @@
         slidesToShow: 1,
         arrows: true,
         dots: false,
+        variableWidth: true,
         infinite: true,
         draggable: false,
         cssEase: 'linear',

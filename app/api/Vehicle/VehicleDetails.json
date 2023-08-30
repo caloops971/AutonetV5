@@ -4,6 +4,14 @@
       {
         "type": "text",
         "name": "vehicle_id"
+      },
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
       }
     ]
   },
@@ -79,6 +87,80 @@
           {
             "name": "LowestPrice",
             "type": "number"
+          }
+        ],
+        "outputType": "array"
+      },
+      {
+        "name": "VehicleImage",
+        "module": "dbconnector",
+        "action": "select",
+        "options": {
+          "connection": "autonetDB",
+          "sql": {
+            "type": "SELECT",
+            "columns": [
+              {
+                "table": "vehicle_img",
+                "column": "id"
+              },
+              {
+                "table": "vehicle_img",
+                "column": "img"
+              }
+            ],
+            "table": {
+              "name": "vehicle_img"
+            },
+            "primary": "id",
+            "joins": [],
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "vehicle_img.vehicle_id",
+                  "field": "vehicle_img.vehicle_id",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{$_GET.vehicle_id}}",
+                  "data": {
+                    "table": "vehicle_img",
+                    "column": "vehicle_id",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "integer",
+                      "primary": false,
+                      "nullable": true,
+                      "name": "vehicle_id"
+                    }
+                  },
+                  "operation": "=",
+                  "table": "vehicle_img"
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            },
+            "query": "select `id`, `img` from `vehicle_img` where `vehicle_img`.`vehicle_id` = ?",
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{$_GET.vehicle_id}}"
+              }
+            ]
+          }
+        },
+        "output": true,
+        "meta": [
+          {
+            "type": "number",
+            "name": "id"
+          },
+          {
+            "type": "text",
+            "name": "img"
           }
         ],
         "outputType": "array"

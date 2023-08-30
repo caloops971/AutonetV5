@@ -1,4 +1,4 @@
-<!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="vehicledetails" appConnect="local" components="{dmxBootstrap5Navigation:{},dmxFormatter:{}}" -->
+<!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="vehicledetails" appConnect="local" components="{dmxBootstrap5Navigation:{},dmxFormatter:{},dmxValidator:{}}" -->
 <meta name="ac:route" content="/vehicle-details/:id/:model">
 <dmx-serverconnect id="scVehicleDetails" url="/api/Vehicle/VehicleDetails" dmx-param:vehicle_id="query.id"></dmx-serverconnect>
 <script>
@@ -14,6 +14,19 @@
         <div class="row no-use-row">
             <div class="col-lg-8">
                 <div class="image-slider-sec">
+                    <div class="car-detail-slider-for">
+                        <div class="slide-item" dmx-repeat:repeat2="content.scVehicleDetails.data.VehicleImage">
+                            <img src="#" class="img-fluid full-width" alt="#" dmx-bind:src="'assets/images/'+content.scVehicleDetails.data.VehicleImage[$index].img">
+                        </div>
+                    </div>
+                    <div class="car-detail-slider-nav">
+                        <div class="slide-item" dmx-repeat:repeat2="content.scVehicleDetails.data.VehicleImage">
+                            <img src="#" dmx-bind:src="'assets/images/'+content.scVehicleDetails.data.VehicleImage[$index].img" class="img-fluid full-width" alt="#">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="image-slider-sec">
                     <div class="car-detail-slider-for">
                         <div class="slide-item">
                             <img src="assets/images/cardetails/gallery-1.jpg" class="img-fluid full-width" alt="#">
@@ -54,7 +67,7 @@
                             <img src="assets/images/cardetails/gallery-6a.jpg" class="img-fluid full-width" alt="#">
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="car-details-tab">
 
 
@@ -467,28 +480,35 @@
                 </div>
                 <div class="side-search-bar h-auto mb-4">
                     <div class="title-icon">
-                        <h5 class="title"><i class="far fa-user"></i> Contact
+                        <h5 class="title"><i class="far fa-user"></i> Enquête
                         </h5>
                     </div>
                     <div class="widget-search-filter">
                         <div class="widget-content">
 
                             <div class="info-form">
-                                <form>
+                                <form is="dmx-serverconnect-form" method="post" id="scformInquiry" action="/api/Vehicle/VehicleInquiry" dmx-on:success="scformInquiry.reset();notifies1.success('Message envoyé')" dmx-on:forbidden="" dmx-on:error="" dmx-on:unauthorized="" dmx-on:invalid="">
+                                    <input type="hidden" name="vehicle_id" dmx-bind:value="query.id">
+                                    <input type="hidden" name="vehicle_name" dmx-bind:value="query.model">
                                     <div class="form-group">
-                                        <input type="email" name="#" class="form-control form-control-custom" placeholder="Your Email">
+                                        <input type="email" name="email_id" class="form-control form-control-custom" placeholder="Your Email *" required="" data-rule-email="">
                                     </div>
                                     <div class="form-group">
-                                        <textarea name="#" class="form-control form-control-custom" placeholder="Message" rows="4"></textarea>
+                                        <input type="number" name="WhatsAppNo" class="form-control form-control-custom" placeholder="WhatsApp No" required="" data-rule-number="">
                                     </div>
                                     <div class="form-group">
-                                        <button type="submit" class="btn-second orange-btn full-width">SEND MESSAGE</button>
+                                        <textarea name="message" class="form-control form-control-custom" placeholder="Message *" rows="4" required="" minlength="20"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn-second orange-btn full-width">Submit</button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
+                              
                 </div>
+
                 <div class="side-search-bar h-auto mb-4">
                     <div class="title-icon">
                         <h5 class="title"><i class="flaticon-frame"></i> Sponsored Car</h5>

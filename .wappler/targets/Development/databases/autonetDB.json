@@ -17,7 +17,8 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci"
+          "collation": "utf8mb4_0900_ai_ci",
+          "system_versioned": false
         },
         "columns": {
           "id": {
@@ -49,7 +50,8 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci"
+          "collation": "utf8mb4_0900_ai_ci",
+          "system_versioned": false
         },
         "columns": {
           "id": {
@@ -89,7 +91,8 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci"
+          "collation": "utf8mb4_0900_ai_ci",
+          "system_versioned": false
         },
         "columns": {
           "id": {
@@ -121,7 +124,8 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci"
+          "collation": "utf8mb4_0900_ai_ci",
+          "system_versioned": false
         },
         "columns": {
           "id": {
@@ -168,7 +172,8 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci"
+          "collation": "utf8mb4_0900_ai_ci",
+          "system_versioned": false
         },
         "columns": {
           "id": {
@@ -231,7 +236,8 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci"
+          "collation": "utf8mb4_0900_ai_ci",
+          "system_versioned": false
         },
         "columns": {
           "id": {
@@ -308,7 +314,8 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci"
+          "collation": "utf8mb4_0900_ai_ci",
+          "system_versioned": false
         },
         "columns": {
           "id": {
@@ -375,7 +382,8 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci"
+          "collation": "utf8mb4_0900_ai_ci",
+          "system_versioned": false
         },
         "columns": {
           "id": {
@@ -628,7 +636,8 @@
         "db": {
           "engine": "InnoDB",
           "schema": "defaultdb",
-          "collation": "utf8mb4_0900_ai_ci"
+          "collation": "utf8mb4_0900_ai_ci",
+          "system_versioned": false
         },
         "columns": {
           "id": {
@@ -649,6 +658,94 @@
             "db": {
               "type": "string",
               "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          }
+        }
+      },
+      "inquiry": {
+        "db": {
+          "engine": "InnoDB",
+          "schema": "defaultdb",
+          "collation": "utf8mb4_0900_ai_ci",
+          "system_versioned": false
+        },
+        "columns": {
+          "id": {
+            "db": {
+              "type": "increments",
+              "primary": true,
+              "nullable": false
+            }
+          },
+          "vehicle_id": {
+            "db": {
+              "type": "integer",
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "vehicle_name": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "email_id": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "whatsapp_no": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "message": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "status": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "remarks": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "created_on": {
+            "db": {
+              "type": "timestamp",
+              "default": "knex.fn.now()",
+              "primary": false,
+              "nullable": false
+            }
+          },
+          "ip_address": {
+            "db": {
+              "type": "string",
+              "maxLength": 100,
               "primary": false,
               "nullable": true
             }
