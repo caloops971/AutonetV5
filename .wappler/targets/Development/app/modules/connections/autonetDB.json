@@ -14,7 +14,10 @@
         "rejectUnauthorized": false
       }
     },
-    "tz": "utc"
+    "tz": "utc",
+    "meta": {}
   },
-  "fileName": "autonetDB.json"
+  "fileName": "autonetDB.json",
+  "actionFilePath": "file:///C:/AutonetV6/app/modules/connections/autonetDB.json",
+  "serverType": "node"
 }

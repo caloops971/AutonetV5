@@ -47,15 +47,11 @@
               "param": ""
             },
             "core:minlength": {
-              "param": "20"
+              "param": "4"
             }
           }
         },
         "name": "message"
-      },
-      {
-        "type": "text",
-        "name": "ip_address"
       }
     ],
     "$_SERVER": [
@@ -77,7 +73,7 @@
             "module": "core",
             "action": "condition",
             "options": {
-              "if": "{{($_POST.email_id&&$_POST.message)}}",
+              "if": "{{$_POST.email_id&&$_POST.message}}",
               "then": {
                 "steps": {
                   "name": "insertInquiry",
@@ -98,7 +94,8 @@
                           "table": "inquiry",
                           "column": "vehicle_name",
                           "type": "text",
-                          "value": "{{$_POST.vehicle_name}}"
+                          "value": "{{$_POST.vehicle_name}}",
+                          "condition": "{{$_POST.vehicle_name}}"
                         },
                         {
                           "table": "inquiry",
@@ -110,7 +107,8 @@
                           "table": "inquiry",
                           "column": "whatsapp_no",
                           "type": "text",
-                          "value": "{{$_POST.WhatsAppNo}}"
+                          "value": "{{$_POST.WhatsAppNo}}",
+                          "condition": "{{$_POST.WhatsAppNo}}"
                         },
                         {
                           "table": "inquiry",
@@ -126,12 +124,6 @@
                         },
                         {
                           "table": "inquiry",
-                          "column": "created_on",
-                          "type": "datetime",
-                          "value": "{{NOW_UTC}}"
-                        },
-                        {
-                          "table": "inquiry",
                           "column": "ip_address",
                           "type": "text",
                           "value": "{{$_SERVER.REMOTE_ADDR}}"
@@ -139,7 +131,7 @@
                       ],
                       "table": "inquiry",
                       "returning": "id",
-                      "query": "insert into `inquiry` (`created_on`, `email_id`, `ip_address`, `message`, `status`, `vehicle_id`, `vehicle_name`, `whatsapp_no`) values (?, ?, ?, ?, ?, ?, ?, ?)",
+                      "query": "insert into `inquiry` (`email_id`, `ip_address`, `message`, `status`, `vehicle_id`, `vehicle_name`, `whatsapp_no`) values (?, ?, ?, ?, ?, ?, ?)",
                       "params": [
                         {
                           "name": ":P1",
@@ -179,12 +171,6 @@
                         },
                         {
                           "name": ":P7",
-                          "type": "expression",
-                          "value": "{{NOW_UTC}}",
-                          "test": ""
-                        },
-                        {
-                          "name": ":P8",
                           "type": "expression",
                           "value": "{{$_SERVER.REMOTE_ADDR}}",
                           "test": ""
