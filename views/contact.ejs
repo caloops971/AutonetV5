@@ -1,4 +1,4 @@
-<!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="contact" appConnect="local" -->
+<!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="contact" appConnect="local" components="{dmxValidator:{}}" -->
 <meta name="ac:route" content="/contact">
 <!-- Contact form -->
 <section class="section-padding contact-page">
@@ -11,18 +11,18 @@
                         <p class="text-dark-grey">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                     </div>
                     <div class="contact-form">
-                        <form>
+                        <form is="dmx-serverconnect-form" method="post" id="serverconnectform1" dmx-on:success="serverconnectform1.reset();notifies1.success('Message envoyé')" dmx-on:forbidden="notifies1.warning(content.serverconnectform1.lastError.response)" dmx-on:error="notifies1.warning(content.serverconnectform1.lastError.response)" dmx-on:unauthorized="notifies1.warning(content.serverconnectform1.lastError.response)" dmx-on:invalid="notifies1.warning(content.serverconnectform1.lastError.response)" action="/api/Vehicle/ContactUs">
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-custom" name="#" placeholder="Your Name">
+                                <input type="text" class="form-control form-control-custom" name="user_name" placeholder="Your Name" required="">
                             </div>
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-custom" name="#" placeholder="Subject">
+                                <input type="text" class="form-control form-control-custom" name="subject" placeholder="Subject" required="">
                             </div>
                             <div class="form-group">
-                                <input type="email" class="form-control form-control-custom" name="#" placeholder="Email I'd">
+                                <input type="email" class="form-control form-control-custom" name="email_id" placeholder="Email I'd" required="" data-rule-email="">
                             </div>
                             <div class="form-group">
-                                <textarea class="form-control form-control-custom" name="#" rows="4" placeholder="Your Message"></textarea>
+                                <textarea class="form-control form-control-custom" name="message" rows="4" placeholder="Your Message" required=""></textarea>
                             </div>
                             <div class="form-group">
                                 <button class="btn-second orange-btn" type="submit">Submit</button>

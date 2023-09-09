@@ -8,6 +8,11 @@
   });
 });
 </script>
+<style>
+    /* .slick-track {
+        display: inline !important;
+    } */
+</style>
 <!-- User page bottom -->
 <div class="listing-with-map car-details">
     <div class="container">
@@ -19,58 +24,30 @@
                             <img src="#" class="img-fluid full-width" alt="#" dmx-bind:src="'assets/images/'+content.scVehicleDetails.data.VehicleImage[$index].img">
                         </div>
                     </div>
-                    <div class="car-detail-slider-nav">
-                        <div class="slide-item" dmx-repeat:repeat2="content.scVehicleDetails.data.VehicleImage">
-                            <img src="#" dmx-bind:src="'assets/images/'+content.scVehicleDetails.data.VehicleImage[$index].img" class="img-fluid full-width" alt="#">
+                    <div class="car-detail-slider-nav" id="repeatSlidingNav">
+                        <div class="slide-item" dmx-show="(content.scVehicleDetails.data.VehicleImage.length >= 1)">
+                            <img dmx-bind:src="'assets/images/'+content.scVehicleDetails.data.VehicleImage[0].img" class="img-fluid full-width" alt="#">
                         </div>
+                        <div class="slide-item" dmx-show="(content.scVehicleDetails.data.VehicleImage.length >= 2)">
+                            <img dmx-bind:src="'assets/images/'+content.scVehicleDetails.data.VehicleImage[1].img" class="img-fluid full-width" alt="#">
+                        </div>
+                        <div class="slide-item" dmx-show="(content.scVehicleDetails.data.VehicleImage.length >= 3)">
+                            <img dmx-bind:src="'assets/images/'+content.scVehicleDetails.data.VehicleImage[2].img" class="img-fluid full-width" alt="#">
+                        </div>
+                        <div class="slide-item" dmx-show="(content.scVehicleDetails.data.VehicleImage.length >= 4)">
+                            <img dmx-bind:src="'assets/images/'+content.scVehicleDetails.data.VehicleImage[3].img" class="img-fluid full-width" alt="#">
+                        </div>
+                        <div class="slide-item" dmx-show="(content.scVehicleDetails.data.VehicleImage.length >= 5)">
+                            <img dmx-bind:src="'assets/images/'+content.scVehicleDetails.data.VehicleImage[4].img" class="img-fluid full-width" alt="#">
+                        </div>
+                        <div class="slide-item" dmx-show="(content.scVehicleDetails.data.VehicleImage.length >= 6)">
+                            <img dmx-bind:src="'assets/images/'+content.scVehicleDetails.data.VehicleImage[5].img" class="img-fluid full-width" alt="#">
+                        </div>
+
                     </div>
                 </div>
 
-                <!-- <div class="image-slider-sec">
-                    <div class="car-detail-slider-for">
-                        <div class="slide-item">
-                            <img src="assets/images/cardetails/gallery-1.jpg" class="img-fluid full-width" alt="#">
-                        </div>
-                        <div class="slide-item">
-                            <img src="assets/images/cardetails/gallery-2.jpg" class="img-fluid full-width" alt="#">
-                        </div>
-                        <div class="slide-item">
-                            <img src="assets/images/cardetails/gallery-3.jpg" class="img-fluid full-width" alt="#">
-                        </div>
-                        <div class="slide-item">
-                            <img src="assets/images/cardetails/gallery-4.jpg" class="img-fluid full-width" alt="#">
-                        </div>
-                        <div class="slide-item">
-                            <img src="assets/images/cardetails/gallery-6.jpg" class="img-fluid full-width" alt="#">
-                        </div>
-                        <div class="slide-item">
-                            <img src="assets/images/cardetails/gallery-2.jpg" class="img-fluid full-width" alt="#">
-                        </div>
-                    </div>
-                    <div class="car-detail-slider-nav">
-                        <div class="slide-item">
-                            <img src="assets/images/cardetails/gallery-1a.jpg" class="img-fluid full-width" alt="#">
-                        </div>
-                        <div class="slide-item">
-                            <img src="assets/images/cardetails/gallery-2a.jpg" class="img-fluid full-width" alt="#">
-                        </div>
-                        <div class="slide-item">
-                            <img src="assets/images/cardetails/gallery-3a.jpg" class="img-fluid full-width" alt="#">
-                        </div>
-                        <div class="slide-item">
-                            <img src="assets/images/cardetails/gallery-6a.jpg" class="img-fluid full-width" alt="#">
-                        </div>
-                        <div class="slide-item">
-                            <img src="assets/images/cardetails/gallery-5a.jpg" class="img-fluid full-width" alt="#">
-                        </div>
-                        <div class="slide-item">
-                            <img src="assets/images/cardetails/gallery-6a.jpg" class="img-fluid full-width" alt="#">
-                        </div>
-                    </div>
-                </div> -->
                 <div class="car-details-tab">
-
-
                     <div id="accordion">
                         <div class="card">
                             <a class="btn orange-btn collapsed text-light font-weight-bold" data-bs-toggle="collapse" href="#collapseOne">
@@ -234,7 +211,51 @@
                             </a>
                             <div id="collapseThree" class="collapse show" data-bs-parent="#accordion">
                                 <div class="card-body">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                    <div class="row mx-0">
+                                        <div class="col-12 col-md-6">
+                                            <div class="row mx-0">
+                                                <div class="col-5">Puissance:</div>
+                                                <div class="col-7">{{scVehicleDetails.data.customDetails[0].Puissance}}</div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="row mx-0">
+                                                <div class="col-5">Energie:</div>
+                                                <div class="col-7">{{scVehicleDetails.data.customDetails[0].Energie}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="row mx-0">
+                                                <div class="col-5">Couleur:</div>
+                                                <div class="col-7">{{scVehicleDetails.data.customDetails[0].Couleur}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="row mx-0">
+                                                <div class="col-5">Couleur exterieure:</div>
+                                                <div class="col-7">{{scVehicleDetails.data.customDetails[0].Couleur_exterieure}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="row mx-0">
+                                                <div class="col-5">Consommation urbaine:</div>
+                                                <div class="col-7">{{scVehicleDetails.data.customDetails[0].Consommation_urbaine_1}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="row mx-0">
+                                                <div class="col-5">Consommation extra urbaine:</div>
+                                                <div class="col-7">{{scVehicleDetails.data.customDetails[0].Consommation_extra_urbaine_1}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="row mx-0">
+                                                <div class="col-5">Emissions de CO2:</div>
+                                                <div class="col-7">{{scVehicleDetails.data.customDetails[0].Emissions_de_CO2_1}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -490,6 +511,7 @@
                                 <form is="dmx-serverconnect-form" method="post" id="scformInquiry" action="/api/Vehicle/VehicleInquiry" dmx-on:success="scformInquiry.reset();notifies1.success('Message envoyé')" dmx-on:forbidden="notifies1.warning(content.scformInquiry.lastError.response)" dmx-on:error="notifies1.warning(content.scformInquiry.lastError.response)" dmx-on:unauthorized="notifies1.warning(content.scformInquiry.lastError.response)" dmx-on:invalid="notifies1.warning(content.scformInquiry.lastError.response)">
                                     <input type="hidden" name="vehicle_id" dmx-bind:value="query.id">
                                     <input type="hidden" name="vehicle_name" dmx-bind:value="query.model">
+                                    <input type="hidden" name="price" dmx-bind:value="scVehicleDetails.data.customDetails[0].LowestPrice">
                                     <div class="form-group">
                                         <input type="email" name="email_id" class="form-control form-control-custom" placeholder="Your Email *" required="" data-rule-email="">
                                     </div>

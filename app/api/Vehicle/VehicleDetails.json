@@ -24,7 +24,7 @@
         "options": {
           "connection": "autonetDB",
           "sql": {
-            "query": "SELECT vd.id AS 'VehicleID',vd.Brand, vd.Model, vd.Tarif,  vd.Lieu,  vd.cm3, vd.Puissance, vd.Energie, vd.Type_de_vehicule, vd.Transmission, vd.Carrosserie, vd.Couleur, vd.Equipements_principaux,vd.Equipements,\nMIN(ROUND(((vd.Tarif + si.price + se.price) + (vd.Tarif + si.price + se.price) * (ti.OM + ti.OMR + ti.TVA) / 100) * 1.15, 0)) AS 'LowestPrice'\nFROM vehicle_data vd\nJOIN Shipping_int si ON vd.Lieu = si.`from`\nJOIN Shipping_ext se ON si.`to` = se.`from`\nJOIN tax_import ti ON vd.cm3 BETWEEN ti.cy_min AND ti.cy_max\nWHERE ti.territoire = 'PTP' AND vd.id = @vehicle_id\nGROUP BY vd.id;\n",
+            "query": "SELECT vd.id AS 'VehicleID',vd.Brand, vd.Model, vd.Tarif,  vd.Lieu,  vd.cm3, vd.Puissance, vd.Energie, vd.Type_de_vehicule, vd.Transmission, vd.Carrosserie, vd.Couleur, vd.Couleur_exterieure, vd.Consommation_urbaine_1, vd.Consommation_extra_urbaine_1, vd.Emissions_de_CO2_1,\nvd.Equipements_principaux,vd.Equipements,\nMIN(ROUND(((vd.Tarif + si.price + se.price) + (vd.Tarif + si.price + se.price) * (ti.OM + ti.OMR + ti.TVA) / 100) * 1.15, 0)) AS 'LowestPrice'\nFROM vehicle_data vd\nJOIN Shipping_int si ON vd.Lieu = si.`from`\nJOIN Shipping_ext se ON si.`to` = se.`from`\nJOIN tax_import ti ON vd.cm3 BETWEEN ti.cy_min AND ti.cy_max\nWHERE ti.territoire = 'PTP' AND vd.id = @vehicle_id\nGROUP BY vd.id;\n",
             "params": [
               {
                 "name": "@vehicle_id",
@@ -85,11 +85,34 @@
             "type": "text"
           },
           {
+            "name": "Couleur_exterieure",
+            "type": "text"
+          },
+          {
+            "name": "Consommation_urbaine_1",
+            "type": "text"
+          },
+          {
+            "name": "Consommation_extra_urbaine_1",
+            "type": "text"
+          },
+          {
+            "name": "Emissions_de_CO2_1",
+            "type": "text"
+          },
+          {
+            "name": "Equipements_principaux",
+            "type": "file"
+          },
+          {
+            "name": "Equipements",
+            "type": "file"
+          },
+          {
             "name": "LowestPrice",
             "type": "number"
           }
-        ],
-        "outputType": "array"
+        ]
       },
       {
         "name": "VehicleImage",
@@ -107,6 +130,10 @@
               {
                 "table": "vehicle_img",
                 "column": "img"
+              },
+              {
+                "table": "vehicle_img",
+                "column": "img_nav"
               }
             ],
             "table": {
@@ -141,7 +168,7 @@
               "conditional": null,
               "valid": true
             },
-            "query": "select `id`, `img` from `vehicle_img` where `vehicle_img`.`vehicle_id` = ?",
+            "query": "SELECT id, img, img_nav\nFROM vehicle_img\nWHERE vehicle_id = :P1 /* {{$_GET.vehicle_id}} */",
             "params": [
               {
                 "operator": "equal",
@@ -172,60 +199,7 @@
         "options": {
           "value": "{{customDetails[0].Equipements_principaux.replace('\\'', '\"')}}"
         },
-        "meta": [
-          {
-            "name": "VehicleID",
-            "type": "number"
-          },
-          {
-            "name": "Brand",
-            "type": "text"
-          },
-          {
-            "name": "Model",
-            "type": "text"
-          },
-          {
-            "name": "Tarif",
-            "type": "number"
-          },
-          {
-            "name": "Lieu",
-            "type": "text"
-          },
-          {
-            "name": "cm3",
-            "type": "number"
-          },
-          {
-            "name": "Puissance",
-            "type": "text"
-          },
-          {
-            "name": "Energie",
-            "type": "text"
-          },
-          {
-            "name": "Type_de_vehicule",
-            "type": "text"
-          },
-          {
-            "name": "Transmission",
-            "type": "text"
-          },
-          {
-            "name": "Carrosserie",
-            "type": "text"
-          },
-          {
-            "name": "Couleur",
-            "type": "text"
-          },
-          {
-            "name": "LowestPrice",
-            "type": "number"
-          }
-        ],
+        "meta": [],
         "outputType": "text",
         "output": false
       },
@@ -236,60 +210,7 @@
         "options": {
           "value": "{{A.parseJSON()}}"
         },
-        "meta": [
-          {
-            "name": "VehicleID",
-            "type": "number"
-          },
-          {
-            "name": "Brand",
-            "type": "text"
-          },
-          {
-            "name": "Model",
-            "type": "text"
-          },
-          {
-            "name": "Tarif",
-            "type": "number"
-          },
-          {
-            "name": "Lieu",
-            "type": "text"
-          },
-          {
-            "name": "cm3",
-            "type": "number"
-          },
-          {
-            "name": "Puissance",
-            "type": "text"
-          },
-          {
-            "name": "Energie",
-            "type": "text"
-          },
-          {
-            "name": "Type_de_vehicule",
-            "type": "text"
-          },
-          {
-            "name": "Transmission",
-            "type": "text"
-          },
-          {
-            "name": "Carrosserie",
-            "type": "text"
-          },
-          {
-            "name": "Couleur",
-            "type": "text"
-          },
-          {
-            "name": "LowestPrice",
-            "type": "number"
-          }
-        ],
+        "meta": [],
         "outputType": "text",
         "output": true
       },
@@ -300,60 +221,7 @@
         "options": {
           "value": "{{customDetails[0].Equipements.parseJSON()}}"
         },
-        "meta": [
-          {
-            "name": "VehicleID",
-            "type": "number"
-          },
-          {
-            "name": "Brand",
-            "type": "text"
-          },
-          {
-            "name": "Model",
-            "type": "text"
-          },
-          {
-            "name": "Tarif",
-            "type": "number"
-          },
-          {
-            "name": "Lieu",
-            "type": "text"
-          },
-          {
-            "name": "cm3",
-            "type": "number"
-          },
-          {
-            "name": "Puissance",
-            "type": "text"
-          },
-          {
-            "name": "Energie",
-            "type": "text"
-          },
-          {
-            "name": "Type_de_vehicule",
-            "type": "text"
-          },
-          {
-            "name": "Transmission",
-            "type": "text"
-          },
-          {
-            "name": "Carrosserie",
-            "type": "text"
-          },
-          {
-            "name": "Couleur",
-            "type": "text"
-          },
-          {
-            "name": "LowestPrice",
-            "type": "number"
-          }
-        ],
+        "meta": [],
         "outputType": "text",
         "output": true
       },

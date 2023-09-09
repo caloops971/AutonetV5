@@ -1,0 +1,156 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/contact.ejs",
+      "linkedForm": "serverconnectform1"
+    },
+    "$_POST": [
+      {
+        "type": "text",
+        "fieldName": "user_name",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "user_name"
+      },
+      {
+        "type": "text",
+        "fieldName": "subject",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "subject"
+      },
+      {
+        "type": "text",
+        "fieldName": "email_id",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            },
+            "core:email": {
+              "param": ""
+            }
+          }
+        },
+        "name": "email_id"
+      },
+      {
+        "type": "text",
+        "fieldName": "message",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "message"
+      }
+    ],
+    "$_SERVER": [
+      {
+        "type": "text",
+        "name": "REMOTE_ADDR"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "",
+      "module": "core",
+      "action": "trycatch",
+      "options": {
+        "try": {
+          "steps": {
+            "name": "",
+            "module": "core",
+            "action": "condition",
+            "options": {
+              "if": "{{$_POST.email_id&&$_POST.message}}",
+              "then": {
+                "steps": {
+                  "name": "apiEmail",
+                  "module": "api",
+                  "action": "send",
+                  "options": {
+                    "url": "https://api.sendgrid.com/v3/mail/send",
+                    "method": "POST",
+                    "data": {
+                      "personalizations": [
+                        {
+                          "to": [
+                            {
+                              "email": "sebastien.loret@hertzstbarth.com",
+                              "name": ""
+                            }
+                          ]
+                        }
+                      ],
+                      "from": {
+                        "email": "Contact@autonet-sbh.com",
+                        "name": "Service Client Autonet"
+                      },
+                      "reply_to": {
+                        "email": "{{$_POST.email_id}}",
+                        "name": "{{$_POST.user_name}}"
+                      },
+                      "subject": "{{$_POST.subject}} [Contact Us]",
+                      "content": [
+                        {
+                          "type": "text/html",
+                          "value": "<p>{{$_POST.message}}</p><br/><br/><p>From: {{$_POST.user_name}}</p>"
+                        }
+                      ]
+                    },
+                    "headers": {
+                      "Authorization": "Bearer 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",
+                      "Content-Type": "application/json"
+                    },
+                    "dataType": "json",
+                    "params": {
+                      "": ""
+                    }
+                  },
+                  "output": false
+                }
+              },
+              "else": {
+                "steps": {
+                  "name": "resp",
+                  "module": "core",
+                  "action": "response",
+                  "options": {
+                    "status": 401,
+                    "data": "Email et Meassage obligatoire"
+                  }
+                }
+              }
+            },
+            "outputType": "boolean"
+          }
+        },
+        "catch": {
+          "steps": {
+            "name": "resp",
+            "module": "core",
+            "action": "response",
+            "options": {
+              "status": 401,
+              "data": "Une erreure est survenue"
+            }
+          }
+        }
+      }
+    }
+  }
+}
